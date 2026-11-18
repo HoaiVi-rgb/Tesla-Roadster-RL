@@ -1,0 +1,1425 @@
+{
+  "metadata": {
+    "title": "Roadster 2D Flying Car RL Experiment Suite",
+    "timestamp": "2026-11-18T07:23:49.598914",
+    "code_version_hash": "f0be7f7e14f487ad",
+    "suite_duration_seconds": 125.94,
+    "total_runs": 15,
+    "seeds_tested": [
+      42,
+      123,
+      999
+    ],
+    "eval_episodes_per_run": 50,
+    "eval_seed_base": 20000,
+    "eval_domain_level": 3,
+    "algorithms_evaluated": [
+      "Standard DQN",
+      "Double DQN",
+      "Double DQN + Shaping",
+      "Double DQN + Curriculum",
+      "Demonstration-Assisted DDQN"
+    ]
+  },
+  "aggregate_results": {
+    "Standard DQN": {
+      "num_seeds": 3,
+      "seeds": [
+        42,
+        123,
+        999
+      ],
+      "success_rate": {
+        "mean": 0.0,
+        "std": 0.0
+      },
+      "collision_rate": {
+        "mean": 0.0,
+        "std": 0.0
+      },
+      "timeout_rate": {
+        "mean": 0.0,
+        "std": 0.0
+      },
+      "mean_reward": {
+        "mean": -2.54,
+        "std": 0.0
+      },
+      "mean_landing_time": {
+        "mean": 0.0,
+        "std": 0.0
+      },
+      "mean_landing_velocity": {
+        "mean": 0.0,
+        "std": 0.0
+      },
+      "mean_abs_landing_angle": {
+        "mean": 0.0,
+        "std": 0.0
+      },
+      "mean_fuel_used": {
+        "mean": 7.18,
+        "std": 0.35
+      }
+    },
+    "Double DQN": {
+      "num_seeds": 3,
+      "seeds": [
+        42,
+        123,
+        999
+      ],
+      "success_rate": {
+        "mean": 0.0,
+        "std": 0.0
+      },
+      "collision_rate": {
+        "mean": 16.0,
+        "std": 24.33
+      },
+      "timeout_rate": {
+        "mean": 0.0,
+        "std": 0.0
+      },
+      "mean_reward": {
+        "mean": -3.14,
+        "std": 0.85
+      },
+      "mean_landing_time": {
+        "mean": 0.0,
+        "std": 0.0
+      },
+      "mean_landing_velocity": {
+        "mean": 0.0,
+        "std": 0.0
+      },
+      "mean_abs_landing_angle": {
+        "mean": 0.0,
+        "std": 0.0
+      },
+      "mean_fuel_used": {
+        "mean": 7.33,
+        "std": 0.38
+      }
+    },
+    "Double DQN + Shaping": {
+      "num_seeds": 3,
+      "seeds": [
+        42,
+        123,
+        999
+      ],
+      "success_rate": {
+        "mean": 0.0,
+        "std": 0.0
+      },
+      "collision_rate": {
+        "mean": 8.67,
+        "std": 10.26
+      },
+      "timeout_rate": {
+        "mean": 0.0,
+        "std": 0.0
+      },
+      "mean_reward": {
+        "mean": -3.1,
+        "std": 0.48
+      },
+      "mean_landing_time": {
+        "mean": 0.0,
+        "std": 0.0
+      },
+      "mean_landing_velocity": {
+        "mean": 0.0,
+        "std": 0.0
+      },
+      "mean_abs_landing_angle": {
+        "mean": 0.0,
+        "std": 0.0
+      },
+      "mean_fuel_used": {
+        "mean": 7.6,
+        "std": 1.89
+      }
+    },
+    "Double DQN + Curriculum": {
+      "num_seeds": 3,
+      "seeds": [
+        42,
+        123,
+        999
+      ],
+      "success_rate": {
+        "mean": 0.0,
+        "std": 0.0
+      },
+      "collision_rate": {
+        "mean": 72.0,
+        "std": 37.04
+      },
+      "timeout_rate": {
+        "mean": 0.0,
+        "std": 0.0
+      },
+      "mean_reward": {
+        "mean": -3.96,
+        "std": 2.38
+      },
+      "mean_landing_time": {
+        "mean": 0.0,
+        "std": 0.0
+      },
+      "mean_landing_velocity": {
+        "mean": 0.0,
+        "std": 0.0
+      },
+      "mean_abs_landing_angle": {
+        "mean": 0.0,
+        "std": 0.0
+      },
+      "mean_fuel_used": {
+        "mean": 7.01,
+        "std": 0.36
+      }
+    },
+    "Demonstration-Assisted DDQN": {
+      "num_seeds": 3,
+      "seeds": [
+        42,
+        123,
+        999
+      ],
+      "success_rate": {
+        "mean": 84.67,
+        "std": 10.07
+      },
+      "collision_rate": {
+        "mean": 15.33,
+        "std": 10.07
+      },
+      "timeout_rate": {
+        "mean": 0.0,
+        "std": 0.0
+      },
+      "mean_reward": {
+        "mean": 1.72,
+        "std": 0.34
+      },
+      "mean_landing_time": {
+        "mean": 5.05,
+        "std": 1.4
+      },
+      "mean_landing_velocity": {
+        "mean": 0.567,
+        "std": 0.067
+      },
+      "mean_abs_landing_angle": {
+        "mean": 2.59,
+        "std": 0.13
+      },
+      "mean_fuel_used": {
+        "mean": 8.76,
+        "std": 2.58
+      }
+    }
+  },
+  "runs": [
+    {
+      "algorithm": "Standard DQN",
+      "exp_id": "exp_a_dqn",
+      "seed": 42,
+      "config": {
+        "exp_id": "exp_a_dqn",
+        "algorithm": "Standard DQN",
+        "seed": 42,
+        "train_episodes": 150,
+        "eval_episodes": 50,
+        "eval_seed_base": 20000,
+        "eval_level": 3,
+        "learning_rate": 0.0005,
+        "gamma": 0.995,
+        "batch_size": 32,
+        "buffer_size": 10000,
+        "warmup_steps": 100,
+        "target_update_frequency": 100,
+        "grad_clip": 10.0,
+        "epsilon_start": 1.0,
+        "epsilon_end": 0.02,
+        "epsilon_decay": 6000,
+        "double_dqn": false,
+        "use_shaping": false,
+        "use_curriculum": false,
+        "use_demonstrations": false,
+        "demo_ratio": 0.25,
+        "lambda_margin": 5.0,
+        "margin_value": 0.2,
+        "lambda_l2": 1e-05,
+        "pretrained_checkpoint": "checkpoints/dqfd/best_pretrained.pth",
+        "checkpoint_dir": "checkpoints/experiments",
+        "output_dir": "experiments"
+      },
+      "checkpoint_path": "checkpoints/experiments\\exp_a_dqn_seed_42.pth",
+      "training_info": {
+        "train_time_seconds": 5.1,
+        "total_env_steps": 2888,
+        "total_updates": 2789,
+        "final_epsilon": 0.5282933333333333,
+        "episodes_logged": 150
+      },
+      "eval_metrics": {
+        "num_episodes": 50,
+        "seed_range": [
+          20000,
+          20049
+        ],
+        "eval_level": 3,
+        "success_rate": 0.0,
+        "collision_rate": 0.0,
+        "timeout_rate": 0.0,
+        "oob_rate": 100.0,
+        "mean_reward": -2.54,
+        "mean_landing_time": 0.0,
+        "mean_landing_velocity": 0.0,
+        "mean_abs_landing_angle": 0.0,
+        "mean_fuel_used": 7.17,
+        "mean_max_q_value": 11.235,
+        "safe_count": 0,
+        "crash_count": 0,
+        "timeout_count": 0,
+        "oob_count": 50
+      },
+      "timestamp": "2026-11-18T07:21:50.842274",
+      "code_version_hash": "f0be7f7e14f487ad",
+      "elapsed_seconds": 7.19
+    },
+    {
+      "algorithm": "Double DQN",
+      "exp_id": "exp_b_double_dqn",
+      "seed": 42,
+      "config": {
+        "exp_id": "exp_b_double_dqn",
+        "algorithm": "Double DQN",
+        "seed": 42,
+        "train_episodes": 150,
+        "eval_episodes": 50,
+        "eval_seed_base": 20000,
+        "eval_level": 3,
+        "learning_rate": 0.0005,
+        "gamma": 0.995,
+        "batch_size": 32,
+        "buffer_size": 10000,
+        "warmup_steps": 100,
+        "target_update_frequency": 100,
+        "grad_clip": 10.0,
+        "epsilon_start": 1.0,
+        "epsilon_end": 0.02,
+        "epsilon_decay": 6000,
+        "double_dqn": true,
+        "use_shaping": false,
+        "use_curriculum": false,
+        "use_demonstrations": false,
+        "demo_ratio": 0.25,
+        "lambda_margin": 5.0,
+        "margin_value": 0.2,
+        "lambda_l2": 1e-05,
+        "pretrained_checkpoint": "checkpoints/dqfd/best_pretrained.pth",
+        "checkpoint_dir": "checkpoints/experiments",
+        "output_dir": "experiments"
+      },
+      "checkpoint_path": "checkpoints/experiments\\exp_b_double_dqn_seed_42.pth",
+      "training_info": {
+        "train_time_seconds": 5.26,
+        "total_env_steps": 2703,
+        "total_updates": 2604,
+        "final_epsilon": 0.5585100000000001,
+        "episodes_logged": 150
+      },
+      "eval_metrics": {
+        "num_episodes": 50,
+        "seed_range": [
+          20000,
+          20049
+        ],
+        "eval_level": 3,
+        "success_rate": 0.0,
+        "collision_rate": 4.0,
+        "timeout_rate": 0.0,
+        "oob_rate": 96.0,
+        "mean_reward": -2.77,
+        "mean_landing_time": 0.0,
+        "mean_landing_velocity": 0.0,
+        "mean_abs_landing_angle": 0.0,
+        "mean_fuel_used": 7.0,
+        "mean_max_q_value": 7.481,
+        "safe_count": 0,
+        "crash_count": 2,
+        "timeout_count": 0,
+        "oob_count": 48
+      },
+      "timestamp": "2026-11-18T07:21:56.848770",
+      "code_version_hash": "f0be7f7e14f487ad",
+      "elapsed_seconds": 6.01
+    },
+    {
+      "algorithm": "Double DQN + Shaping",
+      "exp_id": "exp_c_ddqn_shaping",
+      "seed": 42,
+      "config": {
+        "exp_id": "exp_c_ddqn_shaping",
+        "algorithm": "Double DQN + Shaping",
+        "seed": 42,
+        "train_episodes": 150,
+        "eval_episodes": 50,
+        "eval_seed_base": 20000,
+        "eval_level": 3,
+        "learning_rate": 0.0005,
+        "gamma": 0.995,
+        "batch_size": 32,
+        "buffer_size": 10000,
+        "warmup_steps": 100,
+        "target_update_frequency": 100,
+        "grad_clip": 10.0,
+        "epsilon_start": 1.0,
+        "epsilon_end": 0.02,
+        "epsilon_decay": 6000,
+        "double_dqn": true,
+        "use_shaping": true,
+        "use_curriculum": false,
+        "use_demonstrations": false,
+        "demo_ratio": 0.25,
+        "lambda_margin": 5.0,
+        "margin_value": 0.2,
+        "lambda_l2": 1e-05,
+        "pretrained_checkpoint": "checkpoints/dqfd/best_pretrained.pth",
+        "checkpoint_dir": "checkpoints/experiments",
+        "output_dir": "experiments"
+      },
+      "checkpoint_path": "checkpoints/experiments\\exp_c_ddqn_shaping_seed_42.pth",
+      "training_info": {
+        "train_time_seconds": 4.79,
+        "total_env_steps": 2611,
+        "total_updates": 2512,
+        "final_epsilon": 0.5735366666666667,
+        "episodes_logged": 150
+      },
+      "eval_metrics": {
+        "num_episodes": 50,
+        "seed_range": [
+          20000,
+          20049
+        ],
+        "eval_level": 3,
+        "success_rate": 0.0,
+        "collision_rate": 0.0,
+        "timeout_rate": 0.0,
+        "oob_rate": 100.0,
+        "mean_reward": -2.54,
+        "mean_landing_time": 0.0,
+        "mean_landing_velocity": 0.0,
+        "mean_abs_landing_angle": 0.0,
+        "mean_fuel_used": 6.31,
+        "mean_max_q_value": 7.47,
+        "safe_count": 0,
+        "crash_count": 0,
+        "timeout_count": 0,
+        "oob_count": 50
+      },
+      "timestamp": "2026-11-18T07:22:02.332823",
+      "code_version_hash": "f0be7f7e14f487ad",
+      "elapsed_seconds": 5.48
+    },
+    {
+      "algorithm": "Double DQN + Curriculum",
+      "exp_id": "exp_d_ddqn_curriculum",
+      "seed": 42,
+      "config": {
+        "exp_id": "exp_d_ddqn_curriculum",
+        "algorithm": "Double DQN + Curriculum",
+        "seed": 42,
+        "train_episodes": 150,
+        "eval_episodes": 50,
+        "eval_seed_base": 20000,
+        "eval_level": 3,
+        "learning_rate": 0.0005,
+        "gamma": 0.995,
+        "batch_size": 32,
+        "buffer_size": 10000,
+        "warmup_steps": 100,
+        "target_update_frequency": 100,
+        "grad_clip": 10.0,
+        "epsilon_start": 1.0,
+        "epsilon_end": 0.02,
+        "epsilon_decay": 6000,
+        "double_dqn": true,
+        "use_shaping": false,
+        "use_curriculum": true,
+        "use_demonstrations": false,
+        "demo_ratio": 0.25,
+        "lambda_margin": 5.0,
+        "margin_value": 0.2,
+        "lambda_l2": 1e-05,
+        "pretrained_checkpoint": "checkpoints/dqfd/best_pretrained.pth",
+        "checkpoint_dir": "checkpoints/experiments",
+        "output_dir": "experiments"
+      },
+      "checkpoint_path": "checkpoints/experiments\\exp_d_ddqn_curriculum_seed_42.pth",
+      "training_info": {
+        "train_time_seconds": 2.47,
+        "total_env_steps": 1378,
+        "total_updates": 1279,
+        "final_epsilon": 0.7749266666666667,
+        "final_level": 1,
+        "curriculum_summary": {
+          "curriculum_enabled": true,
+          "current_level": 1,
+          "total_episodes": 150,
+          "rolling_success_rate_percent": 0.0,
+          "level_stats": {
+            "1": {
+              "level": 1,
+              "name": "Level 1: Low Altitude, Upright Stance",
+              "episodes": 150,
+              "safe_landings": 0,
+              "success_rate_percent": 0.0,
+              "crash_rate_percent": 100.0,
+              "timeout_rate_percent": 0.0,
+              "oob_rate_percent": 0.0,
+              "mean_reward": -1.288,
+              "mean_landing_speed_mps": 0.0,
+              "mean_landing_vy_mps": 0.0,
+              "mean_landing_angle_deg": 0.0,
+              "mean_landing_time_s": 0.0,
+              "mean_fuel_used_pct": 1.5
+            },
+            "2": {
+              "level": 2,
+              "name": "Level 2: Moderate Altitude & Tilt",
+              "episodes": 0,
+              "safe_landings": 0,
+              "success_rate_percent": 0.0,
+              "crash_rate_percent": 0.0,
+              "timeout_rate_percent": 0.0,
+              "oob_rate_percent": 0.0,
+              "mean_reward": 0.0,
+              "mean_landing_speed_mps": 0.0,
+              "mean_landing_vy_mps": 0.0,
+              "mean_landing_angle_deg": 0.0,
+              "mean_landing_time_s": 0.0,
+              "mean_fuel_used_pct": 0.0
+            },
+            "3": {
+              "level": 3,
+              "name": "Level 3: Full Challenge Domain",
+              "episodes": 0,
+              "safe_landings": 0,
+              "success_rate_percent": 0.0,
+              "crash_rate_percent": 0.0,
+              "timeout_rate_percent": 0.0,
+              "oob_rate_percent": 0.0,
+              "mean_reward": 0.0,
+              "mean_landing_speed_mps": 0.0,
+              "mean_landing_vy_mps": 0.0,
+              "mean_landing_angle_deg": 0.0,
+              "mean_landing_time_s": 0.0,
+              "mean_fuel_used_pct": 0.0
+            }
+          },
+          "transition_history": []
+        },
+        "episodes_logged": 150
+      },
+      "eval_metrics": {
+        "num_episodes": 50,
+        "seed_range": [
+          20000,
+          20049
+        ],
+        "eval_level": 3,
+        "success_rate": 0.0,
+        "collision_rate": 30.0,
+        "timeout_rate": 0.0,
+        "oob_rate": 70.0,
+        "mean_reward": -3.76,
+        "mean_landing_time": 0.0,
+        "mean_landing_velocity": 0.0,
+        "mean_abs_landing_angle": 0.0,
+        "mean_fuel_used": 6.68,
+        "mean_max_q_value": 5.107,
+        "safe_count": 0,
+        "crash_count": 15,
+        "timeout_count": 0,
+        "oob_count": 35
+      },
+      "timestamp": "2026-11-18T07:22:05.500582",
+      "code_version_hash": "f0be7f7e14f487ad",
+      "elapsed_seconds": 3.17
+    },
+    {
+      "algorithm": "Demonstration-Assisted DDQN",
+      "exp_id": "exp_e_demo_assisted",
+      "seed": 42,
+      "config": {
+        "exp_id": "exp_e_demo_assisted",
+        "algorithm": "Demonstration-Assisted DDQN",
+        "seed": 42,
+        "train_episodes": 150,
+        "eval_episodes": 50,
+        "eval_seed_base": 20000,
+        "eval_level": 3,
+        "learning_rate": 0.0005,
+        "gamma": 0.995,
+        "batch_size": 32,
+        "buffer_size": 10000,
+        "warmup_steps": 100,
+        "target_update_frequency": 100,
+        "grad_clip": 10.0,
+        "epsilon_start": 0.15,
+        "epsilon_end": 0.02,
+        "epsilon_decay": 6000,
+        "double_dqn": true,
+        "use_shaping": true,
+        "use_curriculum": false,
+        "use_demonstrations": true,
+        "demo_ratio": 0.25,
+        "lambda_margin": 5.0,
+        "margin_value": 0.2,
+        "lambda_l2": 1e-05,
+        "pretrained_checkpoint": "checkpoints/dqfd/best_pretrained.pth",
+        "checkpoint_dir": "checkpoints/experiments",
+        "output_dir": "experiments"
+      },
+      "checkpoint_path": "checkpoints/experiments\\exp_e_demo_assisted_seed_42.pth",
+      "training_info": {
+        "train_time_seconds": 22.86,
+        "pretrain_updates": 3000,
+        "total_env_steps": 6126,
+        "total_updates": 9027,
+        "final_epsilon": 0.02,
+        "episodes_logged": 150
+      },
+      "eval_metrics": {
+        "num_episodes": 50,
+        "seed_range": [
+          20000,
+          20049
+        ],
+        "eval_level": 3,
+        "success_rate": 86.0,
+        "collision_rate": 14.0,
+        "timeout_rate": 0.0,
+        "oob_rate": 0.0,
+        "mean_reward": 1.78,
+        "mean_landing_time": 3.83,
+        "mean_landing_velocity": 0.556,
+        "mean_abs_landing_angle": 2.45,
+        "mean_fuel_used": 6.77,
+        "mean_max_q_value": 1.695,
+        "safe_count": 43,
+        "crash_count": 7,
+        "timeout_count": 0,
+        "oob_count": 0
+      },
+      "timestamp": "2026-11-18T07:22:29.442120",
+      "code_version_hash": "f0be7f7e14f487ad",
+      "elapsed_seconds": 23.94
+    },
+    {
+      "algorithm": "Standard DQN",
+      "exp_id": "exp_a_dqn",
+      "seed": 123,
+      "config": {
+        "exp_id": "exp_a_dqn",
+        "algorithm": "Standard DQN",
+        "seed": 123,
+        "train_episodes": 150,
+        "eval_episodes": 50,
+        "eval_seed_base": 20000,
+        "eval_level": 3,
+        "learning_rate": 0.0005,
+        "gamma": 0.995,
+        "batch_size": 32,
+        "buffer_size": 10000,
+        "warmup_steps": 100,
+        "target_update_frequency": 100,
+        "grad_clip": 10.0,
+        "epsilon_start": 1.0,
+        "epsilon_end": 0.02,
+        "epsilon_decay": 6000,
+        "double_dqn": false,
+        "use_shaping": false,
+        "use_curriculum": false,
+        "use_demonstrations": false,
+        "demo_ratio": 0.25,
+        "lambda_margin": 5.0,
+        "margin_value": 0.2,
+        "lambda_l2": 1e-05,
+        "pretrained_checkpoint": "checkpoints/dqfd/best_pretrained.pth",
+        "checkpoint_dir": "checkpoints/experiments",
+        "output_dir": "experiments"
+      },
+      "checkpoint_path": "checkpoints/experiments\\exp_a_dqn_seed_123.pth",
+      "training_info": {
+        "train_time_seconds": 5.74,
+        "total_env_steps": 2764,
+        "total_updates": 2665,
+        "final_epsilon": 0.5485466666666667,
+        "episodes_logged": 150
+      },
+      "eval_metrics": {
+        "num_episodes": 50,
+        "seed_range": [
+          20000,
+          20049
+        ],
+        "eval_level": 3,
+        "success_rate": 0.0,
+        "collision_rate": 0.0,
+        "timeout_rate": 0.0,
+        "oob_rate": 100.0,
+        "mean_reward": -2.54,
+        "mean_landing_time": 0.0,
+        "mean_landing_velocity": 0.0,
+        "mean_abs_landing_angle": 0.0,
+        "mean_fuel_used": 6.84,
+        "mean_max_q_value": 20.243,
+        "safe_count": 0,
+        "crash_count": 0,
+        "timeout_count": 0,
+        "oob_count": 50
+      },
+      "timestamp": "2026-11-18T07:22:35.816627",
+      "code_version_hash": "f0be7f7e14f487ad",
+      "elapsed_seconds": 6.37
+    },
+    {
+      "algorithm": "Double DQN",
+      "exp_id": "exp_b_double_dqn",
+      "seed": 123,
+      "config": {
+        "exp_id": "exp_b_double_dqn",
+        "algorithm": "Double DQN",
+        "seed": 123,
+        "train_episodes": 150,
+        "eval_episodes": 50,
+        "eval_seed_base": 20000,
+        "eval_level": 3,
+        "learning_rate": 0.0005,
+        "gamma": 0.995,
+        "batch_size": 32,
+        "buffer_size": 10000,
+        "warmup_steps": 100,
+        "target_update_frequency": 100,
+        "grad_clip": 10.0,
+        "epsilon_start": 1.0,
+        "epsilon_end": 0.02,
+        "epsilon_decay": 6000,
+        "double_dqn": true,
+        "use_shaping": false,
+        "use_curriculum": false,
+        "use_demonstrations": false,
+        "demo_ratio": 0.25,
+        "lambda_margin": 5.0,
+        "margin_value": 0.2,
+        "lambda_l2": 1e-05,
+        "pretrained_checkpoint": "checkpoints/dqfd/best_pretrained.pth",
+        "checkpoint_dir": "checkpoints/experiments",
+        "output_dir": "experiments"
+      },
+      "checkpoint_path": "checkpoints/experiments\\exp_b_double_dqn_seed_123.pth",
+      "training_info": {
+        "train_time_seconds": 4.92,
+        "total_env_steps": 2656,
+        "total_updates": 2557,
+        "final_epsilon": 0.5661866666666666,
+        "episodes_logged": 150
+      },
+      "eval_metrics": {
+        "num_episodes": 50,
+        "seed_range": [
+          20000,
+          20049
+        ],
+        "eval_level": 3,
+        "success_rate": 0.0,
+        "collision_rate": 44.0,
+        "timeout_rate": 0.0,
+        "oob_rate": 56.0,
+        "mean_reward": -4.11,
+        "mean_landing_time": 0.0,
+        "mean_landing_velocity": 0.0,
+        "mean_abs_landing_angle": 0.0,
+        "mean_fuel_used": 7.25,
+        "mean_max_q_value": 10.917,
+        "safe_count": 0,
+        "crash_count": 22,
+        "timeout_count": 0,
+        "oob_count": 28
+      },
+      "timestamp": "2026-11-18T07:22:41.443287",
+      "code_version_hash": "f0be7f7e14f487ad",
+      "elapsed_seconds": 5.63
+    },
+    {
+      "algorithm": "Double DQN + Shaping",
+      "exp_id": "exp_c_ddqn_shaping",
+      "seed": 123,
+      "config": {
+        "exp_id": "exp_c_ddqn_shaping",
+        "algorithm": "Double DQN + Shaping",
+        "seed": 123,
+        "train_episodes": 150,
+        "eval_episodes": 50,
+        "eval_seed_base": 20000,
+        "eval_level": 3,
+        "learning_rate": 0.0005,
+        "gamma": 0.995,
+        "batch_size": 32,
+        "buffer_size": 10000,
+        "warmup_steps": 100,
+        "target_update_frequency": 100,
+        "grad_clip": 10.0,
+        "epsilon_start": 1.0,
+        "epsilon_end": 0.02,
+        "epsilon_decay": 6000,
+        "double_dqn": true,
+        "use_shaping": true,
+        "use_curriculum": false,
+        "use_demonstrations": false,
+        "demo_ratio": 0.25,
+        "lambda_margin": 5.0,
+        "margin_value": 0.2,
+        "lambda_l2": 1e-05,
+        "pretrained_checkpoint": "checkpoints/dqfd/best_pretrained.pth",
+        "checkpoint_dir": "checkpoints/experiments",
+        "output_dir": "experiments"
+      },
+      "checkpoint_path": "checkpoints/experiments\\exp_c_ddqn_shaping_seed_123.pth",
+      "training_info": {
+        "train_time_seconds": 4.21,
+        "total_env_steps": 2519,
+        "total_updates": 2420,
+        "final_epsilon": 0.5885633333333333,
+        "episodes_logged": 150
+      },
+      "eval_metrics": {
+        "num_episodes": 50,
+        "seed_range": [
+          20000,
+          20049
+        ],
+        "eval_level": 3,
+        "success_rate": 0.0,
+        "collision_rate": 6.0,
+        "timeout_rate": 0.0,
+        "oob_rate": 94.0,
+        "mean_reward": -3.34,
+        "mean_landing_time": 0.0,
+        "mean_landing_velocity": 0.0,
+        "mean_abs_landing_angle": 0.0,
+        "mean_fuel_used": 6.72,
+        "mean_max_q_value": 13.189,
+        "safe_count": 0,
+        "crash_count": 3,
+        "timeout_count": 0,
+        "oob_count": 47
+      },
+      "timestamp": "2026-11-18T07:22:46.244191",
+      "code_version_hash": "f0be7f7e14f487ad",
+      "elapsed_seconds": 4.8
+    },
+    {
+      "algorithm": "Double DQN + Curriculum",
+      "exp_id": "exp_d_ddqn_curriculum",
+      "seed": 123,
+      "config": {
+        "exp_id": "exp_d_ddqn_curriculum",
+        "algorithm": "Double DQN + Curriculum",
+        "seed": 123,
+        "train_episodes": 150,
+        "eval_episodes": 50,
+        "eval_seed_base": 20000,
+        "eval_level": 3,
+        "learning_rate": 0.0005,
+        "gamma": 0.995,
+        "batch_size": 32,
+        "buffer_size": 10000,
+        "warmup_steps": 100,
+        "target_update_frequency": 100,
+        "grad_clip": 10.0,
+        "epsilon_start": 1.0,
+        "epsilon_end": 0.02,
+        "epsilon_decay": 6000,
+        "double_dqn": true,
+        "use_shaping": false,
+        "use_curriculum": true,
+        "use_demonstrations": false,
+        "demo_ratio": 0.25,
+        "lambda_margin": 5.0,
+        "margin_value": 0.2,
+        "lambda_l2": 1e-05,
+        "pretrained_checkpoint": "checkpoints/dqfd/best_pretrained.pth",
+        "checkpoint_dir": "checkpoints/experiments",
+        "output_dir": "experiments"
+      },
+      "checkpoint_path": "checkpoints/experiments\\exp_d_ddqn_curriculum_seed_123.pth",
+      "training_info": {
+        "train_time_seconds": 2.46,
+        "total_env_steps": 1530,
+        "total_updates": 1431,
+        "final_epsilon": 0.7501,
+        "final_level": 1,
+        "curriculum_summary": {
+          "curriculum_enabled": true,
+          "current_level": 1,
+          "total_episodes": 150,
+          "rolling_success_rate_percent": 0.0,
+          "level_stats": {
+            "1": {
+              "level": 1,
+              "name": "Level 1: Low Altitude, Upright Stance",
+              "episodes": 150,
+              "safe_landings": 0,
+              "success_rate_percent": 0.0,
+              "crash_rate_percent": 100.0,
+              "timeout_rate_percent": 0.0,
+              "oob_rate_percent": 0.0,
+              "mean_reward": -1.359,
+              "mean_landing_speed_mps": 0.0,
+              "mean_landing_vy_mps": 0.0,
+              "mean_landing_angle_deg": 0.0,
+              "mean_landing_time_s": 0.0,
+              "mean_fuel_used_pct": 1.72
+            },
+            "2": {
+              "level": 2,
+              "name": "Level 2: Moderate Altitude & Tilt",
+              "episodes": 0,
+              "safe_landings": 0,
+              "success_rate_percent": 0.0,
+              "crash_rate_percent": 0.0,
+              "timeout_rate_percent": 0.0,
+              "oob_rate_percent": 0.0,
+              "mean_reward": 0.0,
+              "mean_landing_speed_mps": 0.0,
+              "mean_landing_vy_mps": 0.0,
+              "mean_landing_angle_deg": 0.0,
+              "mean_landing_time_s": 0.0,
+              "mean_fuel_used_pct": 0.0
+            },
+            "3": {
+              "level": 3,
+              "name": "Level 3: Full Challenge Domain",
+              "episodes": 0,
+              "safe_landings": 0,
+              "success_rate_percent": 0.0,
+              "crash_rate_percent": 0.0,
+              "timeout_rate_percent": 0.0,
+              "oob_rate_percent": 0.0,
+              "mean_reward": 0.0,
+              "mean_landing_speed_mps": 0.0,
+              "mean_landing_vy_mps": 0.0,
+              "mean_landing_angle_deg": 0.0,
+              "mean_landing_time_s": 0.0,
+              "mean_fuel_used_pct": 0.0
+            }
+          },
+          "transition_history": []
+        },
+        "episodes_logged": 150
+      },
+      "eval_metrics": {
+        "num_episodes": 50,
+        "seed_range": [
+          20000,
+          20049
+        ],
+        "eval_level": 3,
+        "success_rate": 0.0,
+        "collision_rate": 86.0,
+        "timeout_rate": 0.0,
+        "oob_rate": 14.0,
+        "mean_reward": -6.44,
+        "mean_landing_time": 0.0,
+        "mean_landing_velocity": 0.0,
+        "mean_abs_landing_angle": 0.0,
+        "mean_fuel_used": 6.95,
+        "mean_max_q_value": 6.846,
+        "safe_count": 0,
+        "crash_count": 43,
+        "timeout_count": 0,
+        "oob_count": 7
+      },
+      "timestamp": "2026-11-18T07:22:49.412137",
+      "code_version_hash": "f0be7f7e14f487ad",
+      "elapsed_seconds": 3.17
+    },
+    {
+      "algorithm": "Demonstration-Assisted DDQN",
+      "exp_id": "exp_e_demo_assisted",
+      "seed": 123,
+      "config": {
+        "exp_id": "exp_e_demo_assisted",
+        "algorithm": "Demonstration-Assisted DDQN",
+        "seed": 123,
+        "train_episodes": 150,
+        "eval_episodes": 50,
+        "eval_seed_base": 20000,
+        "eval_level": 3,
+        "learning_rate": 0.0005,
+        "gamma": 0.995,
+        "batch_size": 32,
+        "buffer_size": 10000,
+        "warmup_steps": 100,
+        "target_update_frequency": 100,
+        "grad_clip": 10.0,
+        "epsilon_start": 0.15,
+        "epsilon_end": 0.02,
+        "epsilon_decay": 6000,
+        "double_dqn": true,
+        "use_shaping": true,
+        "use_curriculum": false,
+        "use_demonstrations": true,
+        "demo_ratio": 0.25,
+        "lambda_margin": 5.0,
+        "margin_value": 0.2,
+        "lambda_l2": 1e-05,
+        "pretrained_checkpoint": "checkpoints/dqfd/best_pretrained.pth",
+        "checkpoint_dir": "checkpoints/experiments",
+        "output_dir": "experiments"
+      },
+      "checkpoint_path": "checkpoints/experiments\\exp_e_demo_assisted_seed_123.pth",
+      "training_info": {
+        "train_time_seconds": 19.13,
+        "pretrain_updates": 3000,
+        "total_env_steps": 6024,
+        "total_updates": 8925,
+        "final_epsilon": 0.02,
+        "episodes_logged": 150
+      },
+      "eval_metrics": {
+        "num_episodes": 50,
+        "seed_range": [
+          20000,
+          20049
+        ],
+        "eval_level": 3,
+        "success_rate": 94.0,
+        "collision_rate": 6.0,
+        "timeout_rate": 0.0,
+        "oob_rate": 0.0,
+        "mean_reward": 2.03,
+        "mean_landing_time": 4.75,
+        "mean_landing_velocity": 0.638,
+        "mean_abs_landing_angle": 2.64,
+        "mean_fuel_used": 7.84,
+        "mean_max_q_value": 1.46,
+        "safe_count": 47,
+        "crash_count": 3,
+        "timeout_count": 0,
+        "oob_count": 0
+      },
+      "timestamp": "2026-11-18T07:23:09.515845",
+      "code_version_hash": "f0be7f7e14f487ad",
+      "elapsed_seconds": 20.1
+    },
+    {
+      "algorithm": "Standard DQN",
+      "exp_id": "exp_a_dqn",
+      "seed": 999,
+      "config": {
+        "exp_id": "exp_a_dqn",
+        "algorithm": "Standard DQN",
+        "seed": 999,
+        "train_episodes": 150,
+        "eval_episodes": 50,
+        "eval_seed_base": 20000,
+        "eval_level": 3,
+        "learning_rate": 0.0005,
+        "gamma": 0.995,
+        "batch_size": 32,
+        "buffer_size": 10000,
+        "warmup_steps": 100,
+        "target_update_frequency": 100,
+        "grad_clip": 10.0,
+        "epsilon_start": 1.0,
+        "epsilon_end": 0.02,
+        "epsilon_decay": 6000,
+        "double_dqn": false,
+        "use_shaping": false,
+        "use_curriculum": false,
+        "use_demonstrations": false,
+        "demo_ratio": 0.25,
+        "lambda_margin": 5.0,
+        "margin_value": 0.2,
+        "lambda_l2": 1e-05,
+        "pretrained_checkpoint": "checkpoints/dqfd/best_pretrained.pth",
+        "checkpoint_dir": "checkpoints/experiments",
+        "output_dir": "experiments"
+      },
+      "checkpoint_path": "checkpoints/experiments\\exp_a_dqn_seed_999.pth",
+      "training_info": {
+        "train_time_seconds": 4.68,
+        "total_env_steps": 2958,
+        "total_updates": 2859,
+        "final_epsilon": 0.5168600000000001,
+        "episodes_logged": 150
+      },
+      "eval_metrics": {
+        "num_episodes": 50,
+        "seed_range": [
+          20000,
+          20049
+        ],
+        "eval_level": 3,
+        "success_rate": 0.0,
+        "collision_rate": 0.0,
+        "timeout_rate": 0.0,
+        "oob_rate": 100.0,
+        "mean_reward": -2.54,
+        "mean_landing_time": 0.0,
+        "mean_landing_velocity": 0.0,
+        "mean_abs_landing_angle": 0.0,
+        "mean_fuel_used": 7.54,
+        "mean_max_q_value": 23.8,
+        "safe_count": 0,
+        "crash_count": 0,
+        "timeout_count": 0,
+        "oob_count": 50
+      },
+      "timestamp": "2026-11-18T07:23:14.794532",
+      "code_version_hash": "f0be7f7e14f487ad",
+      "elapsed_seconds": 5.28
+    },
+    {
+      "algorithm": "Double DQN",
+      "exp_id": "exp_b_double_dqn",
+      "seed": 999,
+      "config": {
+        "exp_id": "exp_b_double_dqn",
+        "algorithm": "Double DQN",
+        "seed": 999,
+        "train_episodes": 150,
+        "eval_episodes": 50,
+        "eval_seed_base": 20000,
+        "eval_level": 3,
+        "learning_rate": 0.0005,
+        "gamma": 0.995,
+        "batch_size": 32,
+        "buffer_size": 10000,
+        "warmup_steps": 100,
+        "target_update_frequency": 100,
+        "grad_clip": 10.0,
+        "epsilon_start": 1.0,
+        "epsilon_end": 0.02,
+        "epsilon_decay": 6000,
+        "double_dqn": true,
+        "use_shaping": false,
+        "use_curriculum": false,
+        "use_demonstrations": false,
+        "demo_ratio": 0.25,
+        "lambda_margin": 5.0,
+        "margin_value": 0.2,
+        "lambda_l2": 1e-05,
+        "pretrained_checkpoint": "checkpoints/dqfd/best_pretrained.pth",
+        "checkpoint_dir": "checkpoints/experiments",
+        "output_dir": "experiments"
+      },
+      "checkpoint_path": "checkpoints/experiments\\exp_b_double_dqn_seed_999.pth",
+      "training_info": {
+        "train_time_seconds": 4.9,
+        "total_env_steps": 2899,
+        "total_updates": 2800,
+        "final_epsilon": 0.5264966666666666,
+        "episodes_logged": 150
+      },
+      "eval_metrics": {
+        "num_episodes": 50,
+        "seed_range": [
+          20000,
+          20049
+        ],
+        "eval_level": 3,
+        "success_rate": 0.0,
+        "collision_rate": 0.0,
+        "timeout_rate": 0.0,
+        "oob_rate": 100.0,
+        "mean_reward": -2.54,
+        "mean_landing_time": 0.0,
+        "mean_landing_velocity": 0.0,
+        "mean_abs_landing_angle": 0.0,
+        "mean_fuel_used": 7.75,
+        "mean_max_q_value": 16.581,
+        "safe_count": 0,
+        "crash_count": 0,
+        "timeout_count": 0,
+        "oob_count": 50
+      },
+      "timestamp": "2026-11-18T07:23:20.294458",
+      "code_version_hash": "f0be7f7e14f487ad",
+      "elapsed_seconds": 5.5
+    },
+    {
+      "algorithm": "Double DQN + Shaping",
+      "exp_id": "exp_c_ddqn_shaping",
+      "seed": 999,
+      "config": {
+        "exp_id": "exp_c_ddqn_shaping",
+        "algorithm": "Double DQN + Shaping",
+        "seed": 999,
+        "train_episodes": 150,
+        "eval_episodes": 50,
+        "eval_seed_base": 20000,
+        "eval_level": 3,
+        "learning_rate": 0.0005,
+        "gamma": 0.995,
+        "batch_size": 32,
+        "buffer_size": 10000,
+        "warmup_steps": 100,
+        "target_update_frequency": 100,
+        "grad_clip": 10.0,
+        "epsilon_start": 1.0,
+        "epsilon_end": 0.02,
+        "epsilon_decay": 6000,
+        "double_dqn": true,
+        "use_shaping": true,
+        "use_curriculum": false,
+        "use_demonstrations": false,
+        "demo_ratio": 0.25,
+        "lambda_margin": 5.0,
+        "margin_value": 0.2,
+        "lambda_l2": 1e-05,
+        "pretrained_checkpoint": "checkpoints/dqfd/best_pretrained.pth",
+        "checkpoint_dir": "checkpoints/experiments",
+        "output_dir": "experiments"
+      },
+      "checkpoint_path": "checkpoints/experiments\\exp_c_ddqn_shaping_seed_999.pth",
+      "training_info": {
+        "train_time_seconds": 4.84,
+        "total_env_steps": 2932,
+        "total_updates": 2833,
+        "final_epsilon": 0.5211066666666666,
+        "episodes_logged": 150
+      },
+      "eval_metrics": {
+        "num_episodes": 50,
+        "seed_range": [
+          20000,
+          20049
+        ],
+        "eval_level": 3,
+        "success_rate": 0.0,
+        "collision_rate": 20.0,
+        "timeout_rate": 0.0,
+        "oob_rate": 80.0,
+        "mean_reward": -3.41,
+        "mean_landing_time": 0.0,
+        "mean_landing_velocity": 0.0,
+        "mean_abs_landing_angle": 0.0,
+        "mean_fuel_used": 9.77,
+        "mean_max_q_value": 10.055,
+        "safe_count": 0,
+        "crash_count": 10,
+        "timeout_count": 0,
+        "oob_count": 40
+      },
+      "timestamp": "2026-11-18T07:23:26.126626",
+      "code_version_hash": "f0be7f7e14f487ad",
+      "elapsed_seconds": 5.83
+    },
+    {
+      "algorithm": "Double DQN + Curriculum",
+      "exp_id": "exp_d_ddqn_curriculum",
+      "seed": 999,
+      "config": {
+        "exp_id": "exp_d_ddqn_curriculum",
+        "algorithm": "Double DQN + Curriculum",
+        "seed": 999,
+        "train_episodes": 150,
+        "eval_episodes": 50,
+        "eval_seed_base": 20000,
+        "eval_level": 3,
+        "learning_rate": 0.0005,
+        "gamma": 0.995,
+        "batch_size": 32,
+        "buffer_size": 10000,
+        "warmup_steps": 100,
+        "target_update_frequency": 100,
+        "grad_clip": 10.0,
+        "epsilon_start": 1.0,
+        "epsilon_end": 0.02,
+        "epsilon_decay": 6000,
+        "double_dqn": true,
+        "use_shaping": false,
+        "use_curriculum": true,
+        "use_demonstrations": false,
+        "demo_ratio": 0.25,
+        "lambda_margin": 5.0,
+        "margin_value": 0.2,
+        "lambda_l2": 1e-05,
+        "pretrained_checkpoint": "checkpoints/dqfd/best_pretrained.pth",
+        "checkpoint_dir": "checkpoints/experiments",
+        "output_dir": "experiments"
+      },
+      "checkpoint_path": "checkpoints/experiments\\exp_d_ddqn_curriculum_seed_999.pth",
+      "training_info": {
+        "train_time_seconds": 2.17,
+        "total_env_steps": 1374,
+        "total_updates": 1275,
+        "final_epsilon": 0.7755799999999999,
+        "final_level": 1,
+        "curriculum_summary": {
+          "curriculum_enabled": true,
+          "current_level": 1,
+          "total_episodes": 150,
+          "rolling_success_rate_percent": 0.0,
+          "level_stats": {
+            "1": {
+              "level": 1,
+              "name": "Level 1: Low Altitude, Upright Stance",
+              "episodes": 150,
+              "safe_landings": 0,
+              "success_rate_percent": 0.0,
+              "crash_rate_percent": 100.0,
+              "timeout_rate_percent": 0.0,
+              "oob_rate_percent": 0.0,
+              "mean_reward": -1.241,
+              "mean_landing_speed_mps": 0.0,
+              "mean_landing_vy_mps": 0.0,
+              "mean_landing_angle_deg": 0.0,
+              "mean_landing_time_s": 0.0,
+              "mean_fuel_used_pct": 1.53
+            },
+            "2": {
+              "level": 2,
+              "name": "Level 2: Moderate Altitude & Tilt",
+              "episodes": 0,
+              "safe_landings": 0,
+              "success_rate_percent": 0.0,
+              "crash_rate_percent": 0.0,
+              "timeout_rate_percent": 0.0,
+              "oob_rate_percent": 0.0,
+              "mean_reward": 0.0,
+              "mean_landing_speed_mps": 0.0,
+              "mean_landing_vy_mps": 0.0,
+              "mean_landing_angle_deg": 0.0,
+              "mean_landing_time_s": 0.0,
+              "mean_fuel_used_pct": 0.0
+            },
+            "3": {
+              "level": 3,
+              "name": "Level 3: Full Challenge Domain",
+              "episodes": 0,
+              "safe_landings": 0,
+              "success_rate_percent": 0.0,
+              "crash_rate_percent": 0.0,
+              "timeout_rate_percent": 0.0,
+              "oob_rate_percent": 0.0,
+              "mean_reward": 0.0,
+              "mean_landing_speed_mps": 0.0,
+              "mean_landing_vy_mps": 0.0,
+              "mean_landing_angle_deg": 0.0,
+              "mean_landing_time_s": 0.0,
+              "mean_fuel_used_pct": 0.0
+            }
+          },
+          "transition_history": []
+        },
+        "episodes_logged": 150
+      },
+      "eval_metrics": {
+        "num_episodes": 50,
+        "seed_range": [
+          20000,
+          20049
+        ],
+        "eval_level": 3,
+        "success_rate": 0.0,
+        "collision_rate": 100.0,
+        "timeout_rate": 0.0,
+        "oob_rate": 0.0,
+        "mean_reward": -1.69,
+        "mean_landing_time": 0.0,
+        "mean_landing_velocity": 0.0,
+        "mean_abs_landing_angle": 0.0,
+        "mean_fuel_used": 7.39,
+        "mean_max_q_value": 1.821,
+        "safe_count": 0,
+        "crash_count": 50,
+        "timeout_count": 0,
+        "oob_count": 0
+      },
+      "timestamp": "2026-11-18T07:23:29.070042",
+      "code_version_hash": "f0be7f7e14f487ad",
+      "elapsed_seconds": 2.94
+    },
+    {
+      "algorithm": "Demonstration-Assisted DDQN",
+      "exp_id": "exp_e_demo_assisted",
+      "seed": 999,
+      "config": {
+        "exp_id": "exp_e_demo_assisted",
+        "algorithm": "Demonstration-Assisted DDQN",
+        "seed": 999,
+        "train_episodes": 150,
+        "eval_episodes": 50,
+        "eval_seed_base": 20000,
+        "eval_level": 3,
+        "learning_rate": 0.0005,
+        "gamma": 0.995,
+        "batch_size": 32,
+        "buffer_size": 10000,
+        "warmup_steps": 100,
+        "target_update_frequency": 100,
+        "grad_clip": 10.0,
+        "epsilon_start": 0.15,
+        "epsilon_end": 0.02,
+        "epsilon_decay": 6000,
+        "double_dqn": true,
+        "use_shaping": true,
+        "use_curriculum": false,
+        "use_demonstrations": true,
+        "demo_ratio": 0.25,
+        "lambda_margin": 5.0,
+        "margin_value": 0.2,
+        "lambda_l2": 1e-05,
+        "pretrained_checkpoint": "checkpoints/dqfd/best_pretrained.pth",
+        "checkpoint_dir": "checkpoints/experiments",
+        "output_dir": "experiments"
+      },
+      "checkpoint_path": "checkpoints/experiments\\exp_e_demo_assisted_seed_999.pth",
+      "training_info": {
+        "train_time_seconds": 19.26,
+        "pretrain_updates": 3000,
+        "total_env_steps": 6163,
+        "total_updates": 9064,
+        "final_epsilon": 0.02,
+        "episodes_logged": 150
+      },
+      "eval_metrics": {
+        "num_episodes": 50,
+        "seed_range": [
+          20000,
+          20049
+        ],
+        "eval_level": 3,
+        "success_rate": 74.0,
+        "collision_rate": 26.0,
+        "timeout_rate": 0.0,
+        "oob_rate": 0.0,
+        "mean_reward": 1.35,
+        "mean_landing_time": 6.58,
+        "mean_landing_velocity": 0.506,
+        "mean_abs_landing_angle": 2.69,
+        "mean_fuel_used": 11.68,
+        "mean_max_q_value": 1.861,
+        "safe_count": 37,
+        "crash_count": 13,
+        "timeout_count": 0,
+        "oob_count": 0
+      },
+      "timestamp": "2026-11-18T07:23:49.595909",
+      "code_version_hash": "f0be7f7e14f487ad",
+      "elapsed_seconds": 20.53
+    }
+  ]
+}

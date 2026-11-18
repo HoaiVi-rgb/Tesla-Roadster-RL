@@ -1,0 +1,190 @@
+{
+  "metadata": {
+    "eval_episodes": 50,
+    "seed_range": [
+      20000,
+      20049
+    ],
+    "evaluation_level": 3,
+    "training_episodes": 100
+  },
+  "baseline_no_curriculum": {
+    "eval_metrics": {
+      "num_episodes": 50,
+      "seed_range": [
+        20000,
+        20049
+      ],
+      "safe_landing_rate_pct": 88.0,
+      "crash_rate_pct": 12.0,
+      "timeout_rate_pct": 0.0,
+      "oob_rate_pct": 0.0,
+      "mean_raw_reward": 1.841566263635814,
+      "mean_landing_speed_mps": 0.6075298223423906,
+      "mean_landing_vy_mps": 0.5867783527169426,
+      "mean_landing_vx_mps": 0.09922529337798106,
+      "mean_landing_angle_deg": 2.407024233275727,
+      "mean_landing_time_s": 3.9083333333333354,
+      "mean_fuel_used_pct": 6.702777777778563
+    },
+    "training_meta": {
+      "train_time_seconds": 16.61,
+      "total_episodes": 150,
+      "curriculum_summary": {
+        "curriculum_enabled": false,
+        "current_level": 3,
+        "total_episodes": 150,
+        "rolling_success_rate_percent": 66.67,
+        "level_stats": {
+          "1": {
+            "level": 1,
+            "name": "Level 1: Low Altitude",
+            "episodes": 0,
+            "safe_landings": 0,
+            "success_rate_percent": 0.0,
+            "crash_rate_percent": 0.0,
+            "timeout_rate_percent": 0.0,
+            "oob_rate_percent": 0.0,
+            "mean_reward": 0.0,
+            "mean_landing_speed_mps": 0.0,
+            "mean_landing_vy_mps": 0.0,
+            "mean_landing_angle_deg": 0.0,
+            "mean_landing_time_s": 0.0,
+            "mean_fuel_used_pct": 0.0
+          },
+          "2": {
+            "level": 2,
+            "name": "Level 2: Mid Altitude",
+            "episodes": 0,
+            "safe_landings": 0,
+            "success_rate_percent": 0.0,
+            "crash_rate_percent": 0.0,
+            "timeout_rate_percent": 0.0,
+            "oob_rate_percent": 0.0,
+            "mean_reward": 0.0,
+            "mean_landing_speed_mps": 0.0,
+            "mean_landing_vy_mps": 0.0,
+            "mean_landing_angle_deg": 0.0,
+            "mean_landing_time_s": 0.0,
+            "mean_fuel_used_pct": 0.0
+          },
+          "3": {
+            "level": 3,
+            "name": "Level 3: Full Domain",
+            "episodes": 150,
+            "safe_landings": 88,
+            "success_rate_percent": 58.67,
+            "crash_rate_percent": 41.33,
+            "timeout_rate_percent": 0.0,
+            "oob_rate_percent": 0.0,
+            "mean_reward": 1.543,
+            "mean_landing_speed_mps": 0.593,
+            "mean_landing_vy_mps": 0.571,
+            "mean_landing_angle_deg": 2.165,
+            "mean_landing_time_s": 4.15,
+            "mean_fuel_used_pct": 6.69
+          }
+        },
+        "transition_history": []
+      }
+    }
+  },
+  "curriculum_enabled": {
+    "eval_metrics": {
+      "num_episodes": 50,
+      "seed_range": [
+        20000,
+        20049
+      ],
+      "safe_landing_rate_pct": 88.0,
+      "crash_rate_pct": 12.0,
+      "timeout_rate_pct": 0.0,
+      "oob_rate_pct": 0.0,
+      "mean_raw_reward": 1.837203840641745,
+      "mean_landing_speed_mps": 0.6043581368049864,
+      "mean_landing_vy_mps": 0.5836730875467785,
+      "mean_landing_vx_mps": 0.11499579711406294,
+      "mean_landing_angle_deg": 2.9604928629724863,
+      "mean_landing_time_s": 4.116098484848492,
+      "mean_fuel_used_pct": 7.278111111111858
+    },
+    "training_meta": {
+      "train_time_seconds": 10.53,
+      "total_episodes": 150,
+      "curriculum_summary": {
+        "curriculum_enabled": true,
+        "current_level": 3,
+        "total_episodes": 150,
+        "rolling_success_rate_percent": 53.33,
+        "level_stats": {
+          "1": {
+            "level": 1,
+            "name": "Level 1: Low Altitude",
+            "episodes": 87,
+            "safe_landings": 43,
+            "success_rate_percent": 49.43,
+            "crash_rate_percent": 50.57,
+            "timeout_rate_percent": 0.0,
+            "oob_rate_percent": 0.0,
+            "mean_reward": 0.738,
+            "mean_landing_speed_mps": 0.655,
+            "mean_landing_vy_mps": 0.634,
+            "mean_landing_angle_deg": 1.976,
+            "mean_landing_time_s": 1.76,
+            "mean_fuel_used_pct": 2.83
+          },
+          "2": {
+            "level": 2,
+            "name": "Level 2: Mid Altitude",
+            "episodes": 39,
+            "safe_landings": 26,
+            "success_rate_percent": 66.67,
+            "crash_rate_percent": 33.33,
+            "timeout_rate_percent": 0.0,
+            "oob_rate_percent": 0.0,
+            "mean_reward": 1.504,
+            "mean_landing_speed_mps": 0.627,
+            "mean_landing_vy_mps": 0.598,
+            "mean_landing_angle_deg": 2.18,
+            "mean_landing_time_s": 3.01,
+            "mean_fuel_used_pct": 4.8
+          },
+          "3": {
+            "level": 3,
+            "name": "Level 3: Full Domain",
+            "episodes": 24,
+            "safe_landings": 14,
+            "success_rate_percent": 58.33,
+            "crash_rate_percent": 41.67,
+            "timeout_rate_percent": 0.0,
+            "oob_rate_percent": 0.0,
+            "mean_reward": 1.497,
+            "mean_landing_speed_mps": 0.553,
+            "mean_landing_vy_mps": 0.541,
+            "mean_landing_angle_deg": 1.834,
+            "mean_landing_time_s": 4.32,
+            "mean_fuel_used_pct": 6.81
+          }
+        },
+        "transition_history": [
+          {
+            "from_level": 1,
+            "to_level": 2,
+            "episodes_at_transition": 87,
+            "total_episodes": 87,
+            "final_rolling_success_rate": 73.33,
+            "promotion_threshold": 70.0
+          },
+          {
+            "from_level": 2,
+            "to_level": 3,
+            "episodes_at_transition": 39,
+            "total_episodes": 126,
+            "final_rolling_success_rate": 73.33,
+            "promotion_threshold": 70.0
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+# Core numerical and scientific libraries
+numpy>=1.24.0
+pytest>=7.4.0
+
+# Deep Learning Framework
+torch>=2.0.0
+
+# Optional utilities
+pyyaml>=6.0
+matplotlib>=3.7.0

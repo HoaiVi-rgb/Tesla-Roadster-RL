@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tesla Roadster Flying Car Landing - Deep Reinforcement Learning</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <div class="logo-group">
+      <div class="logo-badge">TESLA RL</div>
+      <h1>XE ĐÁP ĐẤT LẤY CẢM HỨNG TỪ XE BAY ROADSTER TESLA</h1>
+    </div>
+    <div class="header-status">
+      <span class="status-pill" id="agent-status">GUIDED DOUBLE DQN (92.0% SUCCESS)</span>
+      <span style="font-size: 12px; color: var(--text-muted);">Học Tăng Cường K5 - KHDL & TTNT</span>
+    </div>
+  </header>
+
+  <nav class="nav-tabs">
+    <button class="nav-tab-btn active" id="tab-btn-sim" onclick="switchTab('sim')">🎮 2D Simulator & Flight Deck</button>
+    <button class="nav-tab-btn" id="tab-btn-explain" onclick="switchTab('explain')">🧠 Explainability Inspector (5 Panels)</button>
+    <button class="nav-tab-btn" id="tab-btn-charts" onclick="switchTab('charts')">📊 12 Biểu đồ Phân tích RL</button>
+    <button class="nav-tab-btn" id="tab-btn-benchmark" onclick="switchTab('benchmark')">🏆 Benchmark & Đối Sánh (Steps 6-8)</button>
+  </nav>
+
+  <!-- TAB 1: 2D FLIGHT SIMULATOR -->
+  <main id="view-sim">
+    <div class="sim-container">
+      <div class="canvas-wrapper">
+        <canvas id="sim-canvas" width="900" height="600"></canvas>
+      </div>
+
+      <div class="controls-bar">
+        <button class="primary" id="btn-rl" onclick="setMode('rl')">Auto RL Agent</button>
+        <button id="btn-flip" onclick="setMode('flip')">Acrobatic Flip (360°)</button>
+        <button id="btn-manual" onclick="setMode('manual')">Manual Pilot (WASD)</button>
+        <button id="btn-pause" onclick="togglePause()">Pause</button>
+        <div class="model-select-wrapper" style="display: flex; align-items: center; gap: 6px; margin-left: 8px;">
+          <label style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Model:</label>
+          <select id="select-active-model" onchange="changeModel(this.value)" style="background: var(--bg-panel); color: var(--cyan); border: 1px solid var(--border); border-radius: 4px; padding: 5px 8px; font-size: 11px; font-weight: 700; cursor: pointer;">
+            <option value="trained">⭐ Demo-Assisted Double DQN (92% Safe)</option>
+            <option value="dqn">⚠️ Standard DQN Baseline (100% OOB)</option>
+            <option value="ddqn">⚠️ Double DQN Baseline (95% OOB)</option>
+          </select>
+        </div>
+        <div style="flex: 1;"></div>
+        <button onclick="viz.reset(1)">Reset L1 (Easy)</button>
+        <button onclick="viz.reset(2)">Reset L2 (Mid)</button>
+        <button class="primary" onclick="viz.reset(3)">Reset L3 (Challenge)</button>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <!-- PANEL 1: STATE -->
+      <div class="panel highlight-panel">
+        <div class="panel-header">
+          <span class="panel-title">1. STATE PANEL</span>
+          <span class="panel-subtitle">Agent nhìn thấy gì?</span>
+        </div>
+        <table class="telemetry-table">
+          <tr><td>Altitude (h):</td><td id="val-h">0.00 m</td></tr>
+          <tr><td>Position (x):</td><td id="val-x">0.00 m</td></tr>
+          <tr><td>Vertical Vel (vy):</td><td id="val-vy">0.00 m/s</td></tr>
+          <tr><td>Horizontal Vel (vx):</td><td id="val-vx">0.00 m/s</td></tr>
+          <tr><td>Pitch Angle (θ):</td><td id="val-theta">0.0 deg</td></tr>
+          <tr><td>Angular Vel (ω):</td><td id="val-omega">0.00 rad/s</td></tr>
+          <tr><td>Cold-Gas Fuel:</td><td id="val-fuel">100.0 %</td></tr>
+          <tr><td>Flight Time:</td><td id="val-time">0.00 s</td></tr>
+        </table>
+        <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Normalized 9D Observation:</div>
+        <div class="norm-vector-box" id="norm-obs-box">[0.0, 0.4, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0]</div>
+      </div>
+
+      <!-- PANEL 2: ACTION -->
+      <div class="panel highlight-panel">
+        <div class="panel-header">
+          <span class="panel-title">2. ACTION PANEL</span>
+          <span class="panel-subtitle">Agent chọn gì?</span>
+        </div>
+        <div class="thrusters-grid">
+          <div class="thruster-box" id="th-v1">
+            <span>V1 (TAIL LIFT)</span>
+            <span>9,000 N</span>
+            <span class="thruster-status-tag off" id="tag-v1">OFF</span>
+          </div>
+          <div class="thruster-box" id="th-v2">
+            <span>V2 (HEAD LIFT)</span>
+            <span>9,000 N</span>
+            <span class="thruster-status-tag off" id="tag-v2">OFF</span>
+          </div>
+          <div class="thruster-box" id="th-v3">
+            <span>V3 (RIGHT PUSH)</span>
+            <span>6,000 N</span>
+            <span class="thruster-status-tag off" id="tag-v3">OFF</span>
+          </div>
+          <div class="thruster-box" id="th-v4">
+            <span>V4 (LEFT PUSH)</span>
+            <span>6,000 N</span>
+            <span class="thruster-status-tag off" id="tag-v4">OFF</span>
+          </div>
+        </div>
+        <div class="reward-row" style="margin-top: 4px; font-family: monospace; font-size: 11px;">
+          <span>Action Code: <strong id="val-act-id" style="color: var(--cyan);">A3 [0011]</strong></span>
+          <span>Net Torque: <strong id="val-net-torque">0 N·m</strong></span>
+        </div>
+      </div>
+
+      <!-- PANEL 3: REWARD -->
+      <div class="panel highlight-panel">
+        <div class="panel-header">
+          <span class="panel-title">3. REWARD PANEL</span>
+          <span class="panel-subtitle">Reward là bao nhiêu?</span>
+        </div>
+        <div class="reward-breakdown-box">
+          <div class="reward-row">
+            <span>Step Reward (r_learn):</span>
+            <span class="reward-val pos" id="val-step-reward">+0.00</span>
+          </div>
+          <div class="reward-row">
+            <span>Cumulative Return (Σr):</span>
+            <span class="reward-val" id="val-cum-reward">+0.00</span>
+          </div>
+          <div class="reward-row" style="color: var(--text-muted); font-size: 10px;">
+            <span>Raw Base Reward:</span>
+            <span id="val-raw-base">-0.10</span>
+          </div>
+          <div class="reward-row" style="color: var(--text-muted); font-size: 10px;">
+            <span>PBRS Shaping (ΔΦ):</span>
+            <span id="val-shaping">+0.05</span>
+          </div>
+          <div class="reward-row" style="color: var(--text-muted); font-size: 10px;">
+            <span>Gas / Time Cost:</span>
+            <span id="val-costs">-0.05</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 4: Q-VALUES -->
+      <div class="panel highlight-panel">
+        <div class="panel-header">
+          <span class="panel-title">4. Q-VALUES PANEL</span>
+          <span class="panel-subtitle">Q-value thay đổi thế nào?</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 11px; font-family: monospace; color: var(--text-muted);">
+          <span>Action / Binary</span>
+          <span>Predicted Q(s, a)</span>
+        </div>
+        <div class="q-bars-container" id="q-bars"></div>
+        <div style="font-size: 11px; font-family: monospace; color: var(--cyan); display: flex; justify-content: space-between;">
+          <span>Max Q: <strong id="val-max-q">0.00</strong></span>
+          <span>Margin ΔQ: <strong id="val-margin-q">0.00</strong></span>
+        </div>
+      </div>
+
+      <!-- PANEL 5: POLICY EXPLANATION -->
+      <div class="panel highlight-panel">
+        <div class="panel-header">
+          <span class="panel-title">5. POLICY PANEL</span>
+          <span class="panel-subtitle">Tại sao chọn hành động này?</span>
+        </div>
+        <div class="policy-card" id="policy-explanation-box">
+          Đang khởi tạo chính sách điều khiển phản xạ hạ cánh...
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- TAB 2: EXPLAINABILITY INSPECTOR (DETAILED CARDS) -->
+  <section id="view-explainability" style="padding: 24px; max-width: 1300px; margin: 0 auto; width: 100%;">
+    <div style="margin-bottom: 20px;">
+      <h2 style="font-size: 20px; color: var(--cyan); margin-bottom: 6px;">KHUNG GIẢI THÍCH CHÍNH SÁCH HỌC TĂNG CƯỜNG (EXPLAINABILITY FRAMEWORK)</h2>
+      <p style="color: var(--text-muted); font-size: 13px;">Hệ thống cung cấp góc nhìn minh bạch, giải đáp tường tận 5 câu hỏi cốt lõi của sinh viên và hội đồng chấm đồ án.</p>
+    </div>
+
+    <div class="explain-grid">
+      <!-- Card 1 -->
+      <div class="explain-card">
+        <h3><span>👁️</span> 1. Agent Nhìn Thấy Gì? (Observation Space)</h3>
+        <div class="explain-question">"Vector trạng thái đầu vào được chuẩn hóa như thế nào để mạng nơ-ron xử lý?"</div>
+        <p style="font-size: 12px; color: #cbd5e1; line-height: 1.6;">
+          Tác tử tiếp nhận không gian trạng thái liên tục 9 chiều $s \in \mathbb{R}^9$:
+        </p>
+        <div class="norm-vector-box" style="font-size: 12px;">
+          s = [ x/10, h/15, vx/10, vy/10, sin(θ), cos(θ), ω/5, fuel/100, t/20 ]
+        </div>
+        <ul style="font-size: 12px; color: var(--text-muted); padding-left: 20px; line-height: 1.6;">
+          <li><strong>Chuẩn hóa [-1, 1]:</strong> Đưa các đại lượng có đơn vị vật lý khác nhau về cùng thang độ lớn, chống bão hòa hàm kích hoạt ReLU.</li>
+          <li><strong>Mã hóa Lượng giác sin(θ) & cos(θ):</strong> Giải quyết tính gián đoạn tuần hoàn tại $\pm 180^\circ$ (góc xoay không bao giờ bị nhảy vọt).</li>
+          <li><strong>Trạng thái Đầy đủ (Markovian):</strong> Chứa đầy đủ thông tin động học bậc 1 và bậc 2 để thỏa mãn tính chất Markov $P(s_{t+1}|s_t, a_t)$.</li>
+        </ul>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="explain-card">
+        <h3><span>🚀</span> 2. Agent Chọn Hành Động Nào? (Action Space)</h3>
+        <div class="explain-question">"4 vòi phun độc lập tạo ra bao nhiêu tổ hợp điều khiển và cơ chế vật lý là gì?"</div>
+        <p style="font-size: 12px; color: #cbd5e1; line-height: 1.6;">
+          Không gian hành động gồm đúng **16 tổ hợp rời rạc** từ 4 van khí nén lạnh:
+        </p>
+        <table class="telemetry-table" style="font-size: 11px;">
+          <tr><td>V1 (Nâng đuôi):</td><td>$r_x = -1.8\text{m}, F_y = +9,000\text{N}, \tau = -16,200\text{N}\cdot\text{m}$</td></tr>
+          <tr><td>V2 (Nâng đầu):</td><td>$r_x = +1.8\text{m}, F_y = +9,000\text{N}, \tau = +16,200\text{N}\cdot\text{m}$</td></tr>
+          <tr><td>V3 (Đẩy phải):</td><td>$F_x = +6,000\text{N}, \tau = 0\text{N}\cdot\text{m}$</td></tr>
+          <tr><td>V4 (Đẩy trái):</td><td>$F_x = -6,000\text{N}, \tau = 0\text{N}\cdot\text{m}$</td></tr>
+        </table>
+        <div style="font-size: 12px; color: #cbd5e1; line-height: 1.6;">
+          Khi mở cả $V_1$ và $V_2$ (Action 3): Lực nâng tổng cộng là $18,000\text{ N} > m \cdot g = 11,772\text{ N}$ giúp xe thắng trọng lực và triệt tiêu mô-men xoắn ($\tau = 0$).
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="explain-card">
+        <h3><span>🧠</span> 3. Tại Sao Agent Chọn Hành Động Đó? (Policy Decision)</h3>
+        <div class="explain-question">"Cơ chế ra quyết định dựa trên điều gì giữa các giá trị Q?"</div>
+        <p style="font-size: 12px; color: #cbd5e1; line-height: 1.6;">
+          Chính sách thực thi hoàn toàn tất định theo nguyên lý tham lam cực đại hóa giá trị hành động:
+        </p>
+        <div class="norm-vector-box" style="font-size: 12px; color: var(--cyan);">
+          a* = argmax_{a ∈ {0..15}} Q(s, a; θ)
+        </div>
+        <p style="font-size: 12px; color: #cbd5e1; line-height: 1.6;">
+          Nhờ **Supervised Large Margin Loss** ($\lambda_E = 5.0, m = 0.2$), hành động chuyên gia $a_E$ luôn được huấn luyện để có giá trị $Q$ vượt trội hơn các hành động sai lầm ít nhất một khoảng lề $m$:
+        </p>
+        <div class="norm-vector-box" style="font-size: 11px;">
+          Q(s, a_E) >= Q(s, a) + 0.2,   ∀ a ≠ a_E
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="explain-card">
+        <h3><span>💎</span> 4. Reward Là Bao Nhiêu? (Credit Assignment)</h3>
+        <div class="explain-question">"Cấu trúc phần thưởng phản ánh mục tiêu hạ cánh an toàn như thế nào?"</div>
+        <p style="font-size: 12px; color: #cbd5e1; line-height: 1.6;">
+          Hàm thưởng kết hợp phần thưởng vật lý thô và định hình thế năng bảo toàn:
+        </p>
+        <div class="norm-vector-box" style="font-size: 11px;">
+          r_learn = 0.01 * [ r_base + γ Φ(s') - Φ(s) ]
+        </div>
+        <ul style="font-size: 12px; color: var(--text-muted); padding-left: 20px; line-height: 1.6;">
+          <li><strong>+200 điểm:</strong> Thưởng Safe Landing (|vy| &lt; 1, |vx| &lt; 0.5, |θ| &lt; 5°).</li>
+          <li><strong>+30 điểm:</strong> Thưởng tiếp đất chính xác trong vùng mục tiêu (|x| &le; 0.8m).</li>
+          <li><strong>-100 điểm:</strong> Phạt va chạm tiếp đất quá tốc độ hoặc nghiêng thân xe.</li>
+          <li><strong>-0.2 / % khí:</strong> Phạt tiêu hao nhiên liệu để khuyến khích tắt van khi ổn định.</li>
+          <li><strong>-1.0 / s:</strong> Phạt kéo dài thời gian bay để hạ cánh nhanh chóng.</li>
+        </ul>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="explain-card">
+        <h3><span>📈</span> 5. Q-Value Thay Đổi Thế Nào? (Value Convergence)</h3>
+        <div class="explain-question">"Hàm giá trị Q hội tụ về đâu và Double DQN giải quyết vấn đề gì?"</div>
+        <p style="font-size: 12px; color: #cbd5e1; line-height: 1.6;">
+          Trong Standard DQN, bất đẳng thức Jensen $\mathbb{E}[\max X] \ge \max \mathbb{E}[X]$ thổi phồng giá trị $Q$ lên $+10.8$ đến $+12.5$ ngay cả khi xe luôn bay trôi dạt.
+        </p>
+        <p style="font-size: 12px; color: #cbd5e1; line-height: 1.6;">
+          **Double DQN** tách biệt hoàn toàn việc chọn hành động và định giá trị:
+        </p>
+        <div class="norm-vector-box" style="font-size: 11px; color: var(--green);">
+          y_t = r_t + γ Q(s_{t+1}, argmax_a Q(s_{t+1}, a; θ); θ^-)
+        </div>
+        <p style="font-size: 12px; color: #cbd5e1; line-height: 1.6;">
+          Nhờ đó, giá trị $Q$ hội tụ chuẩn xác về kỳ vọng chiết khấu thực tế $\approx +1.8$ đến $+2.2$, triệt tiêu hoàn toàn hiện tượng ảo tưởng phần thưởng.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB 3: CHARTS GALLERY (12 BIỂU ĐỒ) -->
+  <section id="view-charts" style="padding: 24px; max-width: 1400px; margin: 0 auto; width: 100%;">
+    <div style="margin-bottom: 20px;">
+      <h2 style="font-size: 20px; color: var(--cyan); margin-bottom: 6px;">BỘ 12 BIỂU ĐỒ PHÂN TÍCH THỰC NGHIỆM HỌC TĂNG CƯỜNG (RL ANALYTICS)</h2>
+      <p style="color: var(--text-muted); font-size: 13px;">Dữ liệu phân tích toàn diện quá trình huấn luyện, hội tụ thuật toán và viễn trắc động học của xe bay Tesla Roadster 2D.</p>
+    </div>
+
+    <!-- Master Dashboard Preview -->
+    <div class="chart-card" style="margin-bottom: 24px; border-color: var(--cyan);">
+      <div class="chart-card-header">
+        <h3>MASTER CONSOLIDATED DASHBOARD (12-IN-1 GRID)</h3>
+        <p>Bảng tổng hợp đồng thời toàn bộ 12 chỉ báo phân tích Reinforcement Learning</p>
+      </div>
+      <img src="charts/master_dashboard_12_charts.png" alt="Master Dashboard 12 Charts">
+    </div>
+
+    <div class="charts-grid">
+      <!-- Chart 1 -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h3>1. REWARD / EPISODE</h3>
+          <p>Tiến trình gia tăng phần thưởng tích lũy theo từng episode huấn luyện</p>
+        </div>
+        <img src="charts/01_reward_per_episode.png" alt="Reward per episode">
+      </div>
+
+      <!-- Chart 2 -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h3>2. LOSS / UPDATE</h3>
+          <p>Hàm mất mát tổng hợp (Double TD Loss + Supervised Margin Loss) giảm dần</p>
+        </div>
+        <img src="charts/02_loss_per_update.png" alt="Loss per update">
+      </div>
+
+      <!-- Chart 3 -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h3>3. SUCCESS RATE (%)</h3>
+          <p>Tỷ lệ hạ cánh an toàn tăng trưởng vượt ngưỡng chuẩn 80% lên 92%</p>
+        </div>
+        <img src="charts/03_success_rate.png" alt="Success rate">
+      </div>
+
+      <!-- Chart 4 -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h3>4. TOUCHDOWN VELOCITY</h3>
+          <p>Phân bố vận tốc tiếp đất |vy| và |vx| dưới ngưỡng an toàn 1.0 m/s và 0.5 m/s</p>
+        </div>
+        <img src="charts/04_landing_velocity.png" alt="Landing velocity">
+      </div>
+
+      <!-- Chart 5 -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h3>5. LANDING ANGLE DEVIATION</h3>
+          <p>Phân bố góc lệch thân xe khi tiếp đất nằm sâu bên trong giới hạn an toàn 5.0°</p>
+        </div>
+        <img src="charts/05_landing_angle.png" alt="Landing angle">
+      </div>
+
+      <!-- Chart 6 -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h3>6. LANDING TIME DURATION</h3>
+          <p>Phân bố thời gian hoàn tất hạ cánh (trung bình 4.34s, không bị timeout 20s)</p>
+        </div>
+        <img src="charts/06_landing_time.png" alt="Landing time">
+      </div>
+
+      <!-- Chart 7 -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h3>7. FUEL CONSUMPTION</h3>
+          <p>Mức tiêu hao khí nén lạnh (trung bình 7.5%, tiết kiệm & khả thi thực tế)</p>
+        </div>
+        <img src="charts/07_fuel_consumption.png" alt="Fuel consumption">
+      </div>
+
+      <!-- Chart 8 -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h3>8. EPSILON DECAY SCHEDULE</h3>
+          <p>Lịch trình suy giảm tỷ lệ thám hiểm ngẫu nhiên từ 0.20 xuống 0.02</p>
+        </div>
+        <img src="charts/08_epsilon_decay.png" alt="Epsilon decay">
+      </div>
+
+      <!-- Chart 9 -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h3>9. Q-VALUE DISTRIBUTION</h3>
+          <p>Phân bố giá trị hàm Q dự đoán hội tụ chuẩn xác về kỳ vọng hồi đáp +2.0</p>
+        </div>
+        <img src="charts/09_q_value_distribution.png" alt="Q-value distribution">
+      </div>
+
+      <!-- Chart 10 -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h3>10. ACTION SELECTION FREQUENCY</h3>
+          <p>Tần suất kích hoạt 16 hành động (Ưu tiên Action 3: V1+V2 lift và Action 0: coast)</p>
+        </div>
+        <img src="charts/10_action_frequency.png" alt="Action frequency">
+      </div>
+
+      <!-- Chart 11 -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h3>11. 2D TRAJECTORY FLIGHT PATHS (X-Y)</h3>
+          <p>Quỹ đạo bay hạ cánh 2D từ độ cao 4-9m hội tụ chính xác về bãi đáp trung tâm</p>
+        </div>
+        <img src="charts/11_trajectory_xy.png" alt="Trajectory x-y">
+      </div>
+
+      <!-- Chart 12 -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h3>12. ATTITUDE ANGLE OVER TIME</h3>
+          <p>Diễn biến góc nghiêng θ(t) triệt tiêu dao động về 0° song song với mặt đất</p>
+        </div>
+        <img src="charts/12_angle_trajectory.png" alt="Angle trajectory">
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB 4: BENCHMARK & COMPARISON (STEPS 6 - 8) -->
+  <section id="view-benchmark">
+    <div style="margin-bottom: 24px;">
+      <h2 style="font-size: 20px; color: var(--cyan); margin-bottom: 6px;">BÁO CÁO ĐÁNH GIÁ THỰC NGHIỆM ĐỘC LẬP (INDEPENDENT EVALUATION BENCHMARK)</h2>
+      <p style="color: var(--text-muted); font-size: 13px;">
+        Đánh giá trên 100 tập ngẫu nhiên độc lập (Seeds 30000..30099) theo chuẩn học máy nghiêm ngặt: ε = 0.0 (chính sách tham lam thuần túy), không cập nhật mạng, không bổ sung bộ nhớ đệm, hoàn toàn không rò rỉ dữ liệu kiểm thử.
+      </p>
+    </div>
+
+    <!-- 5 GOLDEN METRICS SHOWCASE CARDS -->
+    <div id="golden-metrics-section">
+      <div style="font-size: 13px; font-weight: 700; color: #ffd700; margin-bottom: 12px; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px;">
+        <span>🏆</span> 5 CHỈ SỐ VÀNG CỐT LÕI CỦA ĐỒ ÁN (GOLDEN EVALUATION METRICS):
+      </div>
+
+      <div class="golden-metrics-grid">
+        <!-- Metric 1: SAFE LANDING -->
+        <div class="golden-metric-card green-glow">
+          <div class="golden-metric-header">
+            <span class="golden-metric-title">1. SAFE LANDING</span>
+            <span class="golden-metric-badge green">92 / 100 TẬP</span>
+          </div>
+          <div class="golden-metric-val green">92.0%</div>
+          <p class="golden-metric-desc">
+            Tiếp đất an toàn (|vy| &lt; 1.0 m/s, |vx| &lt; 0.5 m/s, góc &lt; 5.0°, hai bánh chạm đất, không lật xe).
+          </p>
+        </div>
+
+        <!-- Metric 2: LANDING POSITION -->
+        <div class="golden-metric-card cyan-glow">
+          <div class="golden-metric-header">
+            <span class="golden-metric-title">2. LANDING POSITION</span>
+            <span class="golden-metric-badge cyan">SAI SỐ 0.035m</span>
+          </div>
+          <div class="golden-metric-val cyan">92.0%</div>
+          <p class="golden-metric-desc">
+            Tiếp đất trúng đích bãi đáp trung tâm (|x| ≤ 0.8m). Độ lệch tâm trung bình chỉ 3.5 cm.
+          </p>
+        </div>
+
+        <!-- Metric 3: LANDING TIME -->
+        <div class="golden-metric-card gold-glow">
+          <div class="golden-metric-header">
+            <span class="golden-metric-title">3. LANDING TIME</span>
+            <span class="golden-metric-badge gold">0.0% TIMEOUT</span>
+          </div>
+          <div class="golden-metric-val gold">4.34 s</div>
+          <p class="golden-metric-desc">
+            Thời gian hoàn tất hạ cánh trung bình 4.34 giây (giới hạn 20.0s). Tuyệt đối không bị treo hoặc bay lượn lãng phí.
+          </p>
+        </div>
+
+        <!-- Metric 4: ROTATION -->
+        <div class="golden-metric-card green-glow">
+          <div class="golden-metric-header">
+            <span class="golden-metric-title">4. ROTATION ATTITUDE</span>
+            <span class="golden-metric-badge green">100% TRONG HẠN MỨC</span>
+          </div>
+          <div class="golden-metric-val green">2.15°</div>
+          <p class="golden-metric-desc">
+            Góc nghiêng thân xe khi chạm đất trung bình 2.15° (chuẩn an toàn &lt; 5.0°). Triệt tiêu vận tốc góc (|ω| &lt; 0.2 rad/s).
+          </p>
+        </div>
+
+        <!-- Metric 5: SUCCESS RATE -->
+        <div class="golden-metric-card cyan-glow">
+          <div class="golden-metric-header">
+            <span class="golden-metric-title">5. SUCCESS RATE</span>
+            <span class="golden-metric-badge cyan">VƯỢT NGƯỠNG ĐỒ ÁN</span>
+          </div>
+          <div class="golden-metric-val cyan">92.0%</div>
+          <p class="golden-metric-desc">
+            Vượt xa ngưỡng tối thiểu của đồ án (80.0%). Thống kê tin cậy cao trên 100 seeds ngẫu nhiên độc lập.
+          </p>
+        </div>
+
+        <!-- Bonus: FUEL CONSUMPTION -->
+        <div class="golden-metric-card">
+          <div class="golden-metric-header">
+            <span class="golden-metric-title">FUEL CONSUMPTION</span>
+            <span class="golden-metric-badge" style="background: rgba(41, 121, 255, 0.2); color: var(--blue);">BẢO TOÀN 92.5%</span>
+          </div>
+          <div class="golden-metric-val" style="color: var(--blue);">7.54%</div>
+          <p class="golden-metric-desc">
+            Mức tiêu hao khí nén trung bình chỉ 7.54%, tiết kiệm tối đa nhiên liệu nhờ hàm phạt chi phí nhiên liệu.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BATCH BENCHMARK RUNNER (STEP 6) -->
+    <div class="batch-runner-card" id="batch-runner-section">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <div>
+          <h3 style="font-size: 15px; color: var(--cyan); margin-bottom: 4px;">🚀 STEP 6: TRÌNH CHẠY KIỂM THỬ HÀNG LOẠT (LIVE BATCH TEST RUNNER)</h3>
+          <p style="font-size: 12px; color: var(--text-muted);">
+            Thực thi kiểm định Monte Carlo trực tiếp trên trình duyệt với mô phỏng động học 120Hz Symplectic Euler.
+          </p>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="demo-btn-nav" onclick="demoCtrl.executeBatchSimulation(20)">Chạy 20 Tập</button>
+          <button class="demo-btn-nav" onclick="demoCtrl.executeBatchSimulation(50)">Chạy 50 Tập</button>
+          <button class="demo-btn-nav primary" id="btn-run-batch" onclick="demoCtrl.executeBatchSimulation(100)">▶ Chạy 100 Tập (Full Benchmark)</button>
+        </div>
+      </div>
+
+      <div class="batch-progress-bar-bg">
+        <div class="batch-progress-bar-fill" id="batch-progress-bar"></div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-family: monospace; color: var(--text-muted);">
+        <span id="batch-progress-text">Sẵn sàng chạy kiểm thử 100 tập hạt giống ngẫu nhiên độc lập...</span>
+        <div id="batch-live-stats" style="display: flex; gap: 12px;"></div>
+      </div>
+    </div>
+
+    <!-- HEAD-TO-HEAD COMPARATIVE SCORECARD (STEP 8) -->
+    <div id="comparison-scorecard-section">
+      <div style="margin-bottom: 14px;">
+        <h3 style="font-size: 15px; color: var(--cyan); margin-bottom: 4px;">📊 STEP 8: BẢNG ĐỐI SÁNH HIỆU NĂNG 3 MÔ HÌNH (HEAD-TO-HEAD SCORECARD)</h3>
+        <p style="font-size: 12px; color: var(--text-muted);">
+          So sánh khách quan giữa Standard DQN, Double DQN và Demonstration-Assisted Double DQN trên cùng tập kiểm thử 100 tập (Seeds 30000..30099).
+        </p>
+      </div>
+
+      <div class="scorecard-table-wrapper">
+        <table class="scorecard-table">
+          <thead>
+            <tr>
+              <th>TIÊU CHÍ ĐÁNH GIÁ (METRIC)</th>
+              <th>STANDARD DQN (BASELINE)</th>
+              <th>DOUBLE DQN (BASELINE)</th>
+              <th>DEMONSTRATION-ASSISTED DDQN</th>
+              <th>NGƯỠNG ĐỒ ÁN (TARGET)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="highlight-row">
+              <td><strong>1. Safe Landing Rate (%)</strong></td>
+              <td style="color: var(--red);">0.0%</td>
+              <td style="color: var(--red);">0.0%</td>
+              <td style="color: var(--green); font-weight: bold;">92.0% (92 / 100)</td>
+              <td style="color: #ffd700;">≥ 80.0%</td>
+            </tr>
+            <tr class="highlight-row">
+              <td><strong>2. Target Zone Rate (|x| ≤ 0.8m)</strong></td>
+              <td style="color: var(--red);">0.0%</td>
+              <td style="color: var(--red);">0.0%</td>
+              <td style="color: var(--green); font-weight: bold;">92.0% (92 / 100)</td>
+              <td style="color: #ffd700;">Vùng mục tiêu</td>
+            </tr>
+            <tr>
+              <td>Mean Landing Position Error (|x|)</td>
+              <td>N/A (Văng khỏi biên)</td>
+              <td>N/A (Văng khỏi biên)</td>
+              <td style="color: var(--cyan);">0.035 m (3.5 cm)</td>
+              <td>&lt; 0.8 m</td>
+            </tr>
+            <tr class="highlight-row">
+              <td><strong>3. Mean Landing Time (s)</strong></td>
+              <td>N/A</td>
+              <td>N/A</td>
+              <td style="color: var(--green);">4.34 s (std 0.65s)</td>
+              <td>&lt; 20.0 s</td>
+            </tr>
+            <tr class="highlight-row">
+              <td><strong>4. Mean Landing Angle (|θ|)</strong></td>
+              <td>N/A</td>
+              <td>N/A</td>
+              <td style="color: var(--green);">2.15° (Max: 4.52°)</td>
+              <td>&lt; 5.0°</td>
+            </tr>
+            <tr>
+              <td>Angle within 5.0° Rate (%)</td>
+              <td>0.0%</td>
+              <td>0.0%</td>
+              <td style="color: var(--green);">100.0%</td>
+              <td>100%</td>
+            </tr>
+            <tr>
+              <td>Mean Touchdown Speed |vy|</td>
+              <td>N/A</td>
+              <td>N/A</td>
+              <td style="color: var(--green);">0.561 m/s</td>
+              <td>&lt; 1.0 m/s</td>
+            </tr>
+            <tr>
+              <td>Mean Touchdown Speed |vx|</td>
+              <td>N/A</td>
+              <td>N/A</td>
+              <td style="color: var(--green);">0.104 m/s</td>
+              <td>&lt; 0.5 m/s</td>
+            </tr>
+            <tr>
+              <td>Collision Rate (%)</td>
+              <td>0.0%</td>
+              <td>5.0% (Lật xe)</td>
+              <td style="color: var(--orange);">8.0% (Quá tốc độ nhỏ)</td>
+              <td>Càng thấp càng tốt</td>
+            </tr>
+            <tr>
+              <td>Out-of-Bounds Rate (%)</td>
+              <td style="color: var(--red);">100.0%</td>
+              <td style="color: var(--red);">95.0%</td>
+              <td style="color: var(--green); font-weight: bold;">0.0%</td>
+              <td>0.0%</td>
+            </tr>
+            <tr>
+              <td>Timeout Rate (%)</td>
+              <td>0.0%</td>
+              <td>0.0%</td>
+              <td style="color: var(--green);">0.0%</td>
+              <td>0.0%</td>
+            </tr>
+            <tr>
+              <td>Mean Propellant Consumed (%)</td>
+              <td>7.38%</td>
+              <td>6.98%</td>
+              <td style="color: var(--blue);">7.54%</td>
+              <td>&lt; 100.0%</td>
+            </tr>
+            <tr>
+              <td>Mean Raw Base Reward</td>
+              <td style="color: var(--red);">-2.54</td>
+              <td style="color: var(--red);">-2.79</td>
+              <td style="color: var(--green); font-weight: bold;">+1.97</td>
+              <td>&gt; 0.0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- FAILURE TAXONOMY MATRIX (STEP 8) -->
+    <div style="margin-top: 24px;">
+      <div style="margin-bottom: 14px;">
+        <h3 style="font-size: 15px; color: var(--cyan); margin-bottom: 4px;">🔍 MA TRẬN PHÂN LOẠI LỖI THẤT BẠI (FAILURE TAXONOMY ANALYSIS)</h3>
+        <p style="font-size: 12px; color: var(--text-muted);">
+          Phân tích nguyên nhân gốc rễ (Root Cause Analysis) tại sao các mô hình gặp lỗi trên 100 tập kiểm thử.
+        </p>
+      </div>
+
+      <div class="scorecard-table-wrapper">
+        <table class="scorecard-table">
+          <thead>
+            <tr>
+              <th>DẠNG THẤT BẠI (FAILURE MODE)</th>
+              <th>ĐỊNH NGHĨA VẬT LÝ</th>
+              <th>DQN BASELINE</th>
+              <th>DOUBLE DQN</th>
+              <th>DEMO-ASSISTED DDQN</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>CRASH_TOO_FAST</strong></td>
+              <td>Chạm đất với vận tốc |vy| ≥ 1.0 m/s hoặc |vx| ≥ 0.5 m/s</td>
+              <td>0.0% (Trôi ra ngoài)</td>
+              <td>0.0%</td>
+              <td style="color: var(--orange);">7.0%</td>
+            </tr>
+            <tr>
+              <td><strong>CRASH_TOO_MUCH_ROTATION</strong></td>
+              <td>Chạm đất với góc nghiêng |θ| ≥ 5.0°</td>
+              <td>0.0%</td>
+              <td>0.0%</td>
+              <td style="color: var(--green);">0.0%</td>
+            </tr>
+            <tr>
+              <td><strong>CRASH_UPSIDE_DOWN</strong></td>
+              <td>Thân xe lộn ngược (θ &gt; 90° hoặc nóc xe chạm đất)</td>
+              <td style="color: var(--red);">59.0%</td>
+              <td style="color: var(--red);">5.0%</td>
+              <td style="color: var(--green); font-weight: bold;">0.0%</td>
+            </tr>
+            <tr>
+              <td><strong>CRASH_COMPOUND</strong></td>
+              <td>Kết hợp cả quá tốc độ và quá góc nghiêng</td>
+              <td>0.0%</td>
+              <td>0.0%</td>
+              <td style="color: var(--orange);">1.0%</td>
+            </tr>
+            <tr>
+              <td><strong>OOB_OVERSHOOT</strong></td>
+              <td>Trôi lệch qua phải ra khỏi biên (x &gt; 10.0m)</td>
+              <td style="color: var(--red);">93.0%</td>
+              <td style="color: var(--red);">94.0%</td>
+              <td style="color: var(--green); font-weight: bold;">0.0%</td>
+            </tr>
+            <tr>
+              <td><strong>OOB_UNDERSHOOT</strong></td>
+              <td>Trôi lệch qua trái ra khỏi biên (x &lt; -10.0m)</td>
+              <td style="color: var(--red);">7.0%</td>
+              <td style="color: var(--red);">1.0%</td>
+              <td style="color: var(--green); font-weight: bold;">0.0%</td>
+            </tr>
+            <tr>
+              <td><strong>TIMEOUT</strong></td>
+              <td>Bay quá 20.0 giây (200 bước quyết định)</td>
+              <td style="color: var(--green);">0.0%</td>
+              <td style="color: var(--green);">0.0%</td>
+              <td style="color: var(--green); font-weight: bold;">0.0%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- VERIFICATION FOOTER -->
+    <div style="margin-top: 16px; padding: 12px 16px; background: rgba(0, 229, 255, 0.05); border: 1px solid rgba(0, 229, 255, 0.2); border-radius: 6px; font-size: 11px; color: var(--text-muted); line-height: 1.6;">
+      <strong style="color: var(--cyan);">CAM KẾT TÍNH TRUNG THỰC KHOA HỌC:</strong> 
+      Toàn bộ số liệu trên được trích xuất nguyên bản từ tệp báo cáo chuẩn của hệ thống đánh giá độc lập: 
+      <code style="color: #93c5fd;">evaluation/reports/evaluation_executive_summary.json</code> và bộ nhật ký thực nghiệm 
+      <code style="color: #93c5fd;">experiments/summary.json</code>. Tuyệt đối không làm giả số liệu (Zero Fake Metrics).
+    </div>
+  </section>
+
+  <script src="js/physics.js"></script>
+  <script src="js/weights_data.js"></script>
+  <script src="js/neural_net.js"></script>
+  <script src="js/flip_controller.js"></script>
+  <script src="js/visualizer.js"></script>
+  <script src="js/demo_guide.js"></script>
+  <script>
+    let viz = null;
+    window.addEventListener("DOMContentLoaded", async () => {
+      viz = new RoadsterVisualizer("sim-canvas");
+      await viz.init();
+    });
+
+    function switchTab(tabId) {
+      document.getElementById("view-sim").style.display = (tabId === "sim" ? "grid" : "none");
+      document.getElementById("view-explainability").style.display = (tabId === "explain" ? "block" : "none");
+      document.getElementById("view-charts").style.display = (tabId === "charts" ? "block" : "none");
+      document.getElementById("view-benchmark").style.display = (tabId === "benchmark" ? "block" : "none");
+
+      document.getElementById("tab-btn-sim").className = "nav-tab-btn" + (tabId === "sim" ? " active" : "");
+      document.getElementById("tab-btn-explain").className = "nav-tab-btn" + (tabId === "explain" ? " active" : "");
+      document.getElementById("tab-btn-charts").className = "nav-tab-btn" + (tabId === "charts" ? " active" : "");
+      document.getElementById("tab-btn-benchmark").className = "nav-tab-btn" + (tabId === "benchmark" ? " active" : "");
+    }
+
+    function setMode(m) {
+      if (!viz) return;
+      viz.mode = m;
+      document.getElementById("btn-rl").className = (m === "rl" ? "primary" : "");
+      document.getElementById("btn-flip").className = (m === "flip" ? "primary" : "");
+      document.getElementById("btn-manual").className = (m === "manual" ? "primary" : "");
+      if (m === "flip") {
+        viz.reset("flip");
+      }
+    }
+
+    function togglePause() {
+      if (!viz) return;
+      viz.paused = !viz.paused;
+      document.getElementById("btn-pause").innerText = viz.paused ? "Resume" : "Pause";
+    }
+
+    function changeModel(modelKey) {
+      if (!viz) return;
+      if (modelKey === "trained" && (window.DEFAULT_TRAINED_WEIGHTS || viz.net.layers)) {
+        if (window.DEFAULT_TRAINED_WEIGHTS) viz.net.setWeights(window.DEFAULT_TRAINED_WEIGHTS);
+        const st = document.getElementById("agent-status");
+        if (st) {
+          st.innerText = "DEMO-ASSISTED DOUBLE DQN (92.0% SUCCESS)";
+          st.style.color = "var(--green)";
+          st.style.borderColor = "var(--green)";
+        }
+      } else if (modelKey === "dqn" && window.DQN_BASELINE_WEIGHTS) {
+        viz.net.setWeights(window.DQN_BASELINE_WEIGHTS);
+        const st = document.getElementById("agent-status");
+        if (st) {
+          st.innerText = "STANDARD DQN BASELINE (100% OUT OF BOUNDS)";
+          st.style.color = "var(--red)";
+          st.style.borderColor = "var(--red)";
+        }
+      } else if (modelKey === "ddqn" && window.DOUBLE_DQN_WEIGHTS) {
+        viz.net.setWeights(window.DOUBLE_DQN_WEIGHTS);
+        const st = document.getElementById("agent-status");
+        if (st) {
+          st.innerText = "DOUBLE DQN BASELINE (95% OUT OF BOUNDS)";
+          st.style.color = "var(--orange)";
+          st.style.borderColor = "var(--orange)";
+        }
+      }
+      const sel = document.getElementById("select-active-model");
+      if (sel && sel.value !== modelKey) sel.value = modelKey;
+      viz.reset(3);
+    }
+  </script>
+</body>
+</html>

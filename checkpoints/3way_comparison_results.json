@@ -1,0 +1,71 @@
+{
+  "metadata": {
+    "eval_episodes": 50,
+    "seed_range": [
+      20000,
+      20049
+    ],
+    "curriculum_level": 3,
+    "timestamp": "2026-11-18 07:05:53"
+  },
+  "standard_dqn": {
+    "num_episodes": 50,
+    "seed_range": [
+      20000,
+      20049
+    ],
+    "safe_landing_rate_pct": 0.0,
+    "crash_rate_pct": 42.0,
+    "timeout_rate_pct": 0.0,
+    "oob_rate_pct": 57.99999999999999,
+    "mean_raw_reward": -4.073584890189511,
+    "mean_landing_speed_mps": 0.0,
+    "mean_landing_vy_mps": 0.0,
+    "mean_landing_vx_mps": 0.0,
+    "mean_landing_angle_deg": 0.0,
+    "mean_landing_omega_radps": 0.0,
+    "mean_landing_time_s": 0.0,
+    "mean_fuel_used_pct": 7.090277777777813,
+    "mean_max_q_value": 10.793943114315026
+  },
+  "double_dqn": {
+    "num_episodes": 50,
+    "seed_range": [
+      20000,
+      20049
+    ],
+    "safe_landing_rate_pct": 0.0,
+    "crash_rate_pct": 8.0,
+    "timeout_rate_pct": 0.0,
+    "oob_rate_pct": 92.0,
+    "mean_raw_reward": -2.7568944529628796,
+    "mean_landing_speed_mps": 0.0,
+    "mean_landing_vy_mps": 0.0,
+    "mean_landing_vx_mps": 0.0,
+    "mean_landing_angle_deg": 0.0,
+    "mean_landing_omega_radps": 0.0,
+    "mean_landing_time_s": 0.0,
+    "mean_fuel_used_pct": 6.800277777778786,
+    "mean_max_q_value": 12.525452440258587
+  },
+  "demonstration_assisted_dqn": {
+    "num_episodes": 50,
+    "seed_range": [
+      20000,
+      20049
+    ],
+    "safe_landing_rate_pct": 88.0,
+    "crash_rate_pct": 12.0,
+    "timeout_rate_pct": 0.0,
+    "oob_rate_pct": 0.0,
+    "mean_raw_reward": 1.835457680869856,
+    "mean_landing_speed_mps": 0.6021069045230988,
+    "mean_landing_vy_mps": 0.5760227713080975,
+    "mean_landing_vx_mps": 0.11494803762424093,
+    "mean_landing_angle_deg": 2.044362190235286,
+    "mean_landing_omega_radps": 0.06576699668924187,
+    "mean_landing_time_s": 4.304545454545467,
+    "mean_fuel_used_pct": 7.389500000000894,
+    "mean_max_q_value": 2.110751870218001
+  }
+}

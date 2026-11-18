@@ -1,0 +1,38 @@
+{
+  "dqn": {
+    "eval_metrics": {
+      "success_rate_percent": 0.0,
+      "collision_rate_percent": 40.0,
+      "timeout_rate_percent": 0.0,
+      "oob_rate_percent": 60.0,
+      "mean_raw_reward": -388.88523799594554,
+      "mean_learning_reward": -3.0659620077472765,
+      "mean_landing_vy_ms": 7.501664929839808,
+      "mean_landing_vx_ms": 8.922551546417838,
+      "mean_landing_angle_deg": 279.3202628937339,
+      "mean_landing_time_s": 3.2873333333333243,
+      "mean_estimated_q_value": 10.923483848571777,
+      "max_estimated_q_value": 15.93216609954834
+    },
+    "train_wall_time_s": 3.2763800621032715,
+    "final_train_reward": -482.040915196423
+  },
+  "double_dqn": {
+    "eval_metrics": {
+      "success_rate_percent": 0.0,
+      "collision_rate_percent": 0.0,
+      "timeout_rate_percent": 0.0,
+      "oob_rate_percent": 100.0,
+      "mean_raw_reward": -254.06346666666687,
+      "mean_learning_reward": -1.7479521758102305,
+      "mean_landing_vy_ms": 12.879344574153466,
+      "mean_landing_vx_ms": 10.104507677527435,
+      "mean_landing_angle_deg": 13.093346275382235,
+      "mean_landing_time_s": 2.6239999999999934,
+      "mean_estimated_q_value": 13.011320114135742,
+      "max_estimated_q_value": 25.51141357421875
+    },
+    "train_wall_time_s": 3.754920721054077,
+    "final_train_reward": -427.9567938892281
+  }
+}

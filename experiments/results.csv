@@ -1,0 +1,16 @@
+algorithm,seed,success_rate,collision_rate,timeout_rate,mean_reward,mean_landing_time,mean_landing_velocity,mean_abs_landing_angle,mean_fuel_used
+Standard DQN,42,0.00,0.00,0.00,-2.54,0.00,0.000,0.00,7.17
+Double DQN,42,0.00,4.00,0.00,-2.77,0.00,0.000,0.00,7.00
+Double DQN + Shaping,42,0.00,0.00,0.00,-2.54,0.00,0.000,0.00,6.31
+Double DQN + Curriculum,42,0.00,30.00,0.00,-3.76,0.00,0.000,0.00,6.68
+Demonstration-Assisted DDQN,42,86.00,14.00,0.00,1.78,3.83,0.556,2.45,6.77
+Standard DQN,123,0.00,0.00,0.00,-2.54,0.00,0.000,0.00,6.84
+Double DQN,123,0.00,44.00,0.00,-4.11,0.00,0.000,0.00,7.25
+Double DQN + Shaping,123,0.00,6.00,0.00,-3.34,0.00,0.000,0.00,6.72
+Double DQN + Curriculum,123,0.00,86.00,0.00,-6.44,0.00,0.000,0.00,6.95
+Demonstration-Assisted DDQN,123,94.00,6.00,0.00,2.03,4.75,0.638,2.64,7.84
+Standard DQN,999,0.00,0.00,0.00,-2.54,0.00,0.000,0.00,7.54
+Double DQN,999,0.00,0.00,0.00,-2.54,0.00,0.000,0.00,7.75
+Double DQN + Shaping,999,0.00,20.00,0.00,-3.41,0.00,0.000,0.00,9.77
+Double DQN + Curriculum,999,0.00,100.00,0.00,-1.69,0.00,0.000,0.00,7.39
+Demonstration-Assisted DDQN,999,74.00,26.00,0.00,1.35,6.58,0.506,2.69,11.68

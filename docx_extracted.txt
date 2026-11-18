@@ -1,0 +1,107 @@
+DYNAMICS / LEARNING LAB · 4 VALVES
+Roadster · Thruster Lab
+Xe 2D lấy cảm hứng từ Tesla · 4 vòi phun cố định
+2D SANDBOX
+01 / Không gian thử nghiệmSẵn sàng · kéo xe để đặt vị trí
+Độ cao trọng tâm
+—
+Vận tốc đứng
+—
+Góc thân xe
+—
+Khí còn lại
+—
+Bản bố trí cố định
+Đầu xe hướng sang phải. Miệng vòi kim loại cố định; vệt sương trắng xanh biểu diễn khí thoát ra; mũi tên vàng là lực lên xe. Góc dương = ngẩng đầu.
+Vòi
+Tọa độ trên thân (m)
+Lực cố định / mômen
+Gốc tại trọng tâm; +x về đầu xe, +y lên mái. Thân 4,4 × 0,9 m; khối lượng 1.200 kg; mỗi vòi nâng 9.000 N, mỗi vòi ngang 6.000 N. Tổng lực nâng 18.000 N lớn hơn trọng lực 11.772 N; lực cố định khi mở. Thông số giả lập phục vụ giảng dạy.
+02 / Thiết lập lần thả
+Kéo thân xe để di chuyển. Kéo nút ↻ trên xe để xoay tự do, hoặc giữ Shift và kéo thân xe. Có thể dựng đứng ±90° và lật ngược ±180°.
+Góc ban đầu 
+15°
+Độ cao trọng tâm 
+6 m
+Chế độ điều khiểnThủ công · chọn từng vanTự đáp · bộ điều khiển mẫuDQN · mạng sinh viên thiết kếRơi tự do · không phun
+▶ Thả xeTạm dừng↺ Đặt lại
+Tự đáp mẫu dùng điều khiển phản hồi. Chọn DQN để chạy mạng của bạn; thiết kế và huấn luyện ở mục 04 bên dưới.
+Hiện nhãn vòi và lực
+03 / Bảng van
+Bấm một van để chuyển sang thủ công và bật/tắt van đó. Đèn cam = đang mở; khi tạm dừng, hiệu ứng chỉ là xem trước.
+Đóng tất cảMở 2 vòi nâng
+V1: nâng đuôi · V2: nâng đầu
+V3: đẩy phải · V4: đẩy trái
+V1 + V2: nâng thẳng (18.000 N)
+Kết quả lần thử
+Kéo xe trong vùng mô phỏng, chỉnh góc rồi nhấn Thả xe.
+Đáp an toàn: |vᵧ| < 1 m/s, |vₓ| < 0,5 m/s, |góc| < 5°, |ω| < 0,2 rad/s tại tiếp xúc. Mô hình kết thúc tại va chạm đầu tiên.
+04 / DEEP Q LEARNING · TÍNH TOÁN THẬT TRÊN TRÌNH DUYỆT
+Double DQN · 4 van · học trực tiếp trong HTML
+1. Quan sát s → 2. Chọn tổ hợp ε-greedy → 3. Mô phỏng, nhận r và s′ → 4. Lưu replay → 5. Lấy batch ngẫu nhiên → 6. Tính y = r + γ(1−done)Q_target(s′, a*) → 7. Cập nhật mạng online → 8. Sao chép target định kỳ.
+Giữ quy trình replay và target network của slide David Silver. Mặc định mở rộng sang Double DQN và Huber; chọn DQN cổ điển + MSE để đối chiếu. Đây là MLP với 9 thông số vật lý, không phải CNN Atari.
+Chặn thưởng kiểu Atari: r học = sign(r), trong {−1, 0, +1}Khuyên tắt sign clipping: nó làm mất mức chênh lệch giữa đáp an toàn, va chạm và hết giờ. Mặc định chỉ chia thưởng cho 100. Đổi thiết lập cần khởi tạo lại để không trộn kinh nghiệm.
+9 đầu vào → 64 → 64 → 16 Q. Giữ thang đầu vào x/10,h/15 để tương thích mạng đã lưu; đây là thang tham chiếu, không phải biên mới. Đầu vào thêm thời gian đã bay để mạng phân biệt trạng thái sắp hết giờ. 
+File đã chứa mạng học có hướng dẫn để thử ngay
+: chọn DQN và bấm Thả xe, hoặc Kiểm tra100 lượt. Nút Khởi tạo mạng mới xóa mạng này và tạo trọng số ngẫu nhiên. Học có hướng dẫn là tùy chọn riêng, không phải DQN tự học từ đầu. Cấu hình đề xuất giúp thử nghiệm có căn cứ, chưa chứng minh tối ưu hoặc bảo đảm hội tụ.
+Cấu hình phần thưởng
+ · thay đổi rồi bấm Áp dụng & học lại
+Thưởng +200 khi đáp an toàn; +30 nếu hai bánh nằm trong vùng xanh. Va chạm thất bại −100; hết giờ −500; vượt biên −250. Chạm đất phạt thêm 2(vx²+vy²) và 10(1−cosθ). Chi phí khí 0,2/% và thời gian 1/giây. Phạt góc chỉ khi chạm đất. Thất bại va chạm luôn bằng −½ hệ số thưởng an toàn.
+Áp dụng thưởng & học lại từ đầuĐiền bộ thưởng đề xuấtKiểm tra 100 lượt · ε = 0
+Chưa kiểm tra độc lập. Kiểm tra không cập nhật trọng số và không thêm replay.
+Chưa có bước thưởng. Các hệ số chỉ có hiệu lực sau khi bấm Áp dụng; thao tác này xóa trọng số và replay cũ.
+r_gốc = thưởng kết thúc + thưởng vùng − phạt vượt biên/hết giờ − w_đáp(vx²+vy²) − w_góc(1−cosθ_chạm) − w_khí Δkhí − w_thời_gian Δt. Hai khoản va chạm/góc chỉ tính khi chạm đất. Không chặn tốc độ ở 5 m/s. r_học = 0,01 × (r_gốc + F) để ổn định thang số, giữ nguyên tương quan phần thưởng. F là trợ giúp tùy chọn, trình bày bên dưới.
+Bộ huấn luyện mẫu · có hướng dẫn
+Không gian bay: rộng 40 m (x=−20…20), cao 25 m.
+ Kéo xe đến x±18 m, cao23m. Camera bám ngang khi xe tới gần mép. Miền học mẫu giữ x±2m,cao4–9m,góc±15°; mở rộng nơi bay không có nghĩa mạng đã học ở mọi vị trí mới.
+Thiết lập
+Giá trị mẫu
+Mạng / thuật toán
+9 → 64 → 64 → 16 · ReLU · Double DQN
+Seed / tối ưu
+42 · RMSProp · lr0,0005 · γ0,995 · Huber
+Ví dụ
+500 lượt điều khiển mẫu, chỉ giữ lượt an toàn, tối đa20.000 transition
+Học từ ví dụ
+75.000 cập nhật, batch64, loss TD +5×margin0,2
+Target / replay
+Sao chép mỗi500cập nhật · replay50.000
+Chọn mạng
+Validation20trạng thái cố định, seed10000, mỗi5.000cập nhật; ưu tiên tỷ lệ đáp, rồi reward
+Kiểm tra cuối
+100trạng thái khác, seed20000, ε=0; không cập nhật/replay
+Chạy lại từ đầu:
+ ① Áp dụng bộ mẫu → ② Tạo ví dụ & học có hướng dẫn → ③ Kiểm tra100lượt → ④ Lưu HTML. Bộ mẫu không chạy thêm RL tự do sau giai đoạn ví dụ; chỉ thử học tiếp sau khi đã lưu bản tốt. DQN tự học từ đầu vẫn có thể chọn riêng, nhưng thử nghiệm trước chưa đạt.
+Bộ mẫu là cấu hình tham chiếu có thể chạy lại, chưa phải tiêu chuẩn bảo đảm hội tụ. Cần thử ít nhất3seed riêng trước khi kết luận độ ổn định. Mạng đi kèm đã học ở miền nhỏ cũ; tỷ lệ73/100 là kết quả lịch sử, cần chạy lại kiểm tra sau khi đổi môi trường.
+Áp dụng bộ huấn luyện mẫu · tạo mạng mới
+Chưa có validation trong phiên này. Tập validation và tập test dùng hai seed riêng.
+Hướng cải thiện được chọn
+Thuật toánDouble DQN · khuyến nghịDQN cổ điển · theo slide Trợ giúp học bằng potential shaping
+F=γΦ(s′)−Φ(s), Φ=−10√(x²+max(0,h−0,72)²)−4√(vx²+vy²). Đặt Φ=0 tại mọi kết thúc. Không chứa góc nghiêng. Đây là tín hiệu phụ khi học; reward gốc và đánh giá an toàn vẫn tách riêng. Theo lý thuyết, dạng potential giữ chính sách tối ưu của mục tiêu đã chiết khấu; không bảo đảm mạng sâu hội tụ.
+Học từ dễ tới khó
+300 lượt đầu: cao 1,2–3 m, góc tối đa ±3°, x±0,2 m; lượt 301–800: cao 2–5 m, góc tối đa ±8°, x±0,5 m; sau đó: cao 4–9 m, x±2 m và góc đã chọn. Chỉ số train theo cấp không phải tỷ lệ thành công toàn miền. Kiểm tra độc lập luôn dùng cao 4–9 m và toàn góc đã chọn.
+Seed huấn luyệnLớp ẩn (số nút, cách nhau dấu phẩy)Hàm kích hoạtReLUTanhLossMSE · đúng slide trang 38Huber · tùy chọn mở rộngLearning rateGamma γBatch size8163264Sao chép target mỗi N cập nhậtSố lượt muốn huấn luyệnGóc ngẫu nhiên ban đầu±15° · nhập môn±30°±90°±180° · khó
+Tạo ví dụ & học có hướng dẫnTải HTML kèm trọng số hiện tạiKhởi tạo mạng mới▶ Huấn luyệnDừng học1 bước mô phỏng1 lần cập nhậtThử DQN với xe đã đặt
+Sẵn sàng. Huấn luyện sẽ thay đổi trọng số thực, cần nhiều lượt để cải thiện.
+Màu nút: kích hoạt âm (cam) / dương (xanh). Đường nối: trọng số âm (cam) / dương (xanh); độ đậm theo độ lớn. Tối đa 12 nút/lớp được vẽ, nhưng toàn bộ nút khai báo đều được tính. Bấm nút để xem chi tiết.
+Chọn một nút trên sơ đồ để xem giá trị kích hoạt, bias và trọng số.
+Tổ hợp 4 van được chọn
+Mẫu cập nhật gần nhất · DQN / Double DQN
+Chưa cập nhật. Cần tích lũy đủ batch mẫu trong replay buffer.
+Reward mỗi lượt / Loss
+Hai dải có thang riêng, tự co giãn. Reward: xanh · Loss đã chọn: cam. Giữ tối đa 200 điểm gần nhất.
+Định nghĩa trạng thái, hành động và quy trình
+Trạng thái: [x/10,h/15,vx/10,vy/10,sinθ,cosθ,ω/5,khí/100,t/20]. Hành động: đủ 16 tổ hợp V1…V4. Mỗi quyết định 0,1 s, vật lý 120 Hz; tối đa 20 s. Replay 50.000, batch 64 ở mạng đi kèm (có thể chọn 8–64), warmup 512, cập nhật mỗi 4 bước; ε: mạng mới 1→0,05 trong 100.000 bước; mạng đã học ví dụ 0,1→0,05 trong 100.000 bước. Huấn luyện lại có thể làm mạng hiện tại kém đi; lưu HTML trước khi thử thay đổi. Huber mặc định, RMSProp decay 0,95, gradient ±1. Target sao chép theo số cập nhật, không theo số lượt.
+Reward được tính theo bộ hệ số đang áp dụng ở bảng cấu hình phần thưởng; xem từng thành phần ở bảng bước gần nhất. Các hệ số là thiết lập giảng dạy, không bảo đảm hội tụ. Chỉ số thành công hiển thị lấy tối đa 50 lượt huấn luyện gần nhất, có khám phá epsilon; chưa phải kiểm định độc lập.
+Căn cứ thiết kế & giới hạn thực nghiệm
+Bản 4 vòi trước: hai seed, mỗi seed 200.000 bước, cùng đạt 0/100 ca test; chính sách tốt nhất hết giờ. Thử nghiệm thêm Double DQN + shaping + curriculum từ đầu (seed42): 300.000 bước, 6.943 lượt train, best chọn bằng20 ca validation vẫn0/100 ca test. Bản học có hướng dẫn:500 lượt giáo viên,17.827 transition từ lượt đáp an toàn,75.000 cập nhật batch 64, TD +5×margin 0,2; chọn best bằng20 ca validation, đạt63/100 ca test khác (seed 40000…40099, cao 4–9m, góc ±15°, x ±2m). Trọng số này được nhúng trong file. Kiểm tra tiếp bằng chính hàm mô phỏng JavaScript của HTML trên100 trạng thái cố định (LCG seed 20000):73/100 đáp an toàn,27 va chạm,0 hết giờ/vượt biên; |vy|trung bình tại tiếp xúc 0,61m/s. Đây là tập khởi tạo khác tập100 ca Python, không cộng/gộp hai tỷ lệ. Huấn luyện thử được thực hiện ngoài trình duyệt bằng phép cập nhật tương ứng, không phải số lượt bạn đã chạy trong phiên HTML. Không chứng minh tối ưu toàn cục; kết quả phụ thuộc tập thử và seed. Hãy dùng Kiểm tra độc lập thay vì nhìn reward train.
+Gymnasium LunarLander
+: tham khảo tín hiệu trong chuyến bay; giữ khác biệt góc chỉ phạt tại tiếp đất. 
+van Hasselt, Guez & Silver · Double DQN
+: giảm overestimation. 
+Ng, Harada & Russell · Potential shaping
+: dạng γΦ′−Φ.
+Góc ±180° cho phép tương tác nhưng không có cam kết đáp được từ mọi trạng thái. Mô hình này kết thúc khi chạm đất lần đầu, khác LunarLander có tiếp xúc và ổn định trên đất. Bộ phản hồi là một lựa chọn riêng, không được âm thầm dùng thay mạng DQN. Nút học từ ví dụ tạo 500 lượt điều khiển mẫu với góc ±15°, cao 4–9m; chỉ giữ lượt an toàn, sau đó 75.000 cập nhật TD + 5×margin 0,2. Đây là biến thể có hướng dẫn với replay đều, không phải DQfD đầy đủ (không prioritized replay/n-step). Bộ huấn luyện mẫu trong bản không gian rộng chọn checkpoint bằng20ca validation LCGseed10000; kết quả mạng đi kèm trước đây được chọn bằng20ca NumPyseed10000, nên hai phép chọn không đồng nhất. Không cam kết chạy lại ra đúng73%. Khi vừa tạo ví dụ và học tiếp trong cùng phiên, mỗi batch lấy 25% mẫu từ tập ví dụ cố định. File trọng số không chứa replay/ví dụ/optimizer; nếu mở lại, cần tạo ví dụ mới để giữ khoản giám sát. Lưu trọng số không tương đương resume toàn bộ huấn luyện. 
+Hester và cộng sự · DQfD
+ là căn cứ cho kết hợp TD và loss giám sát.
+Mô phỏng giáo dục với lực và mômen vật rắn 2D; không mô phỏng đầy đủ hệ thống xe Tesla, giảm áp bình khí hoặc hệ treo.
