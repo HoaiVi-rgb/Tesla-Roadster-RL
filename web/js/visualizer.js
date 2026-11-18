@@ -89,9 +89,9 @@ class RoadsterVisualizer {
       y = 8.5;
       x = 0.0;
       vx = 0.0;
-      vy = 0.0;
+      vy = 4.9; // Parabolic launch loft: vehicle reaches apex at t=0.5s during flip inversion
       theta = 0.0;
-      omega = 0.0;
+      omega = 5.5; // Rapid 360 flip in ~1.1s
       if (typeof PhysicsFlipController !== "undefined") {
         this.flipCtrl = new PhysicsFlipController();
       }
@@ -131,6 +131,7 @@ class RoadsterVisualizer {
       action = this.net.predict(obs);
     } else if (this.mode === "flip" && this.flipCtrl) {
       action = this.flipCtrl.compute_action({
+        x: this.body.x,
         y: this.body.y,
         vy: this.body.vy,
         vx: this.body.vx,
@@ -475,6 +476,17 @@ class RoadsterVisualizer {
     if (this.body.isCrashed) {
       elBox.innerHTML = `<strong>💥 VA CHẠM (CRASH):</strong> Xe chạm đất vượt ngưỡng an toàn. Replay buffer ghi nhận phạt va chạm -100 điểm.`;
       elBox.style.borderColor = "var(--red)";
+      return;
+    }
+
+    if (this.mode === "flip") {
+      const rotDeg = Math.abs(this.body.accumulatedRotation * 180.0 / Math.PI).toFixed(0);
+      if (this.flipCtrl && !this.flipCtrl.flipCompleted) {
+        elBox.innerHTML = `<strong>🌀 CHẾ ĐỘ LỘN NHÀO (ACROBATIC FLIP 360°):</strong> Đang thực hiện vòng lộn trên không (Xoay tích lũy: ${rotDeg}° / 360°). Bộ điều khiển pha kích hoạt V2 tạo mô-men xoắn xoay lộn ngược và hãm dừng giải tích bằng V1.`;
+      } else {
+        elBox.innerHTML = `<strong>🛬 TIẾP ĐẤT SAU CÚ LỘN (FLARE DESCENT):</strong> Đã hoàn tất 1 vòng lộn 360° an toàn! Bộ điều khiển chuyển sang pha hạ cánh tốc độ cao, kích hoạt V1+V2 hãm vận tốc rơi về dưới 1.0 m/s để tiếp đất êm ái.`;
+      }
+      elBox.style.borderColor = "#c084fc";
       return;
     }
 

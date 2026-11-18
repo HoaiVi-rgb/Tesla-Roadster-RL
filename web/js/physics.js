@@ -7,6 +7,8 @@ const PhysicsConstants = {
   MASS: 1200.0,
   LENGTH: 4.4,
   HEIGHT: 0.9,
+  BODY_LENGTH: 4.4,
+  BODY_HEIGHT: 0.9,
   REST_HEIGHT: 0.72,
   MOMENT_INERTIA: 2017.0,
   GRAVITY: 9.8,
@@ -247,5 +249,9 @@ class PhysicsBody {
       this.fuel / 100.0,
       this.time / 20.0,
     ];
+  }
+
+  getNormalizedObservation() {
+    return this.getNormalizedState();
   }
 }

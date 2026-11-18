@@ -645,11 +645,13 @@ class DemoGuideController {
 }
 
 // Global Demo Guide Instance
-let demoCtrl = null;
+var demoCtrl = null;
+window.demoCtrl = null;
 window.addEventListener("DOMContentLoaded", () => {
   setTimeout(() => {
     if (typeof viz !== "undefined" && viz) {
       demoCtrl = new DemoGuideController(viz);
+      window.demoCtrl = demoCtrl;
       demoCtrl.init();
       console.log("[DemoGuide] Initialized successfully with 8 Steps.");
     }
