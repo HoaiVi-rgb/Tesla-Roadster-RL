@@ -207,7 +207,9 @@ class RoadsterVisualizer {
       this.stats.safeLandings++;
       const spd = Math.sqrt(this.body.vx * this.body.vx + this.body.vy * this.body.vy);
       this.stats.speeds.push(spd);
-      this.stats.angles.push(Math.abs(this.body.theta * 180.0 / Math.PI));
+      const twoPi = 2.0 * Math.PI;
+      const wrappedTh = ((this.body.theta + Math.PI) % twoPi + twoPi) % twoPi - Math.PI;
+      this.stats.angles.push(Math.abs(wrappedTh * 180.0 / Math.PI));
       this.stats.times.push(this.body.time);
     } else if (this.body.isCrashed) {
       this.stats.crashes++;
@@ -525,12 +527,14 @@ class RoadsterVisualizer {
   }
 
   updateHUD() {
+    const twoPi = 2.0 * Math.PI;
+    const wrappedTh = ((this.body.theta + Math.PI) % twoPi + twoPi) % twoPi - Math.PI;
     const raw = {
       h: this.body.y,
       x: this.body.x,
       vx: this.body.vx,
       vy: this.body.vy,
-      thetaDeg: (this.body.theta * 180.0 / Math.PI),
+      thetaDeg: (wrappedTh * 180.0 / Math.PI),
       omega: this.body.omega,
       fuel: this.body.fuel,
       time: this.body.time,

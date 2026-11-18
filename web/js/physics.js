@@ -89,7 +89,8 @@ class PhysicsBody {
 
     const hasContact = collidingPoints.length > 0;
     const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
-    const angleRad = Math.abs(this.theta);
+    const twoPi = 2.0 * Math.PI;
+    const normAngle = Math.abs(((this.theta + Math.PI) % twoPi + twoPi) % twoPi - Math.PI);
     const omegaAbs = Math.abs(this.omega);
 
     const rw = pts.find((p) => p.name === "rear_wheel");
@@ -109,7 +110,7 @@ class PhysicsBody {
       onlyWheelsContact &&
       Math.abs(this.vy) <= PhysicsConstants.SAFE_LANDING_MAX_VY &&
       Math.abs(this.vx) <= PhysicsConstants.SAFE_LANDING_MAX_VX &&
-      angleRad <= PhysicsConstants.SAFE_LANDING_MAX_ANGLE_RAD &&
+      normAngle <= PhysicsConstants.SAFE_LANDING_MAX_ANGLE_RAD &&
       omegaAbs <= PhysicsConstants.SAFE_LANDING_MAX_OMEGA &&
       wheelsInPad;
 
